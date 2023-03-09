@@ -440,3 +440,19 @@ If there are multiple containers in a pod, to get logs of a specific container u
 ```
 kubectl logs <pod-name> -c <pod-name>
 ```
+
+### 9.8. Shell access to a running Pod
+
+To enter a pod via terminal in interactive mode (`-it` parameter):
+```
+kubectl exec -it hello-world -- bash
+```
+Or if it requires SSH:
+```
+kubectl exec -it hello-world -- sh
+```
+Similarly, if there are multiple containers, to enter a specific one use command:
+```
+kubectl exec -it hello-world -c hello-world -- sh
+```
+Entering into containers like this is usually used for debugging purposes.
