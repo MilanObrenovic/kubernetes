@@ -358,3 +358,43 @@ spec:
           # This container is listening on port 80
         - containerPort: 80
 ```
+
+### 9.3. Create and delete resources
+
+Check all pods:
+```
+kubectl get pods
+```
+
+Delete specific pod:
+```
+kubectl delete pod <pod-name>
+```
+
+### 9.4. List resources
+
+To list all pods from ALL namespaces:
+```
+kubectl get pods -A
+```
+
+To list EVERYTHING (not just pods) within the default namespace:
+```
+kubectl get all
+```
+
+To list EVERYTHING (not just pods) within ALL namespaces:
+```
+kubectl get all -A
+```
+
+To search pods within a specific namespace:
+```
+kubectl get pod -n kube-system
+```
+- `-n <namespace>` targets the namespace name.
+
+Find all existing namespaces:
+```
+kubectl get namespaces
+```
