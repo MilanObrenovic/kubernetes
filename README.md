@@ -130,3 +130,51 @@ Kubernetes is the world's most popular open-source container orchestration engin
 
 - Depending on where the Kubernetes is run, lets say AWS for example, then it creates a Load Balancer on AWS.
 - Just how it takes care of Load Balancers, it does the same for Storage and Instances.
+
+## 7. Worker Node
+
+![img.png](misc/worker-node.png)
+
+- It is a VM or physical machine running on Linux.
+- Provides running environment for your applications.
+- Inside a Worker Node, there are Pods.
+- Pod is a container in the Docker world.
+- When deploying applications, we should really be deploying Microservices.
+- The Worker Node has 3 main components:
+  - Kubelet (agent)
+  - Container Runtime
+  - Kube Proxy
+
+![img.png](misc/worker-node-3-main-components.png)
+
+### 7.1. Kubelet
+
+![img.png](misc/kubelet.png)
+
+- This is the Main Agent that runs on every single node.
+- Receives Pod definitions from API Server.
+- Interacts with Container Runtime to run containers associated with that Pod.
+- Reports Node and Pod state to Master Node through the API.
+
+### 7.2. Container Runtime
+
+- Responsible for pulling images from container registries such as:
+  - Docker Hub
+  - GCR (Google Container Registry)
+  - ECR (Amazon Elastic Container Registry)
+  - ACR (Azure Container Registry)
+- After pulling the images, it's also responsible for starting containers from those images and also stopping containers.
+- Abstracts container management for Kubernetes.
+- Within it, we have a Container Runtime Interface (CRI).
+  - This is an interface for 3rd party container runtimes.
+
+### 7.3. Kube Proxy
+
+- Agent that runs on every node through a DaemonSet.
+- Responsible for:
+  - Local cluster networking.
+  - Each node gets its own unique IP address.
+  - Routing network traffic to load balanced services.
+- For example
+  1. If two Pods want to talk to each other, Kube Proxy will handle that.
+  2. If you as a client want to send a request to your cluster, Kube Proxy will handle all of that.
