@@ -398,3 +398,10 @@ Find all existing namespaces:
 ```
 kubectl get namespaces
 ```
+
+### 9.5. Kubectl Describe
+
+To view all details and information about a specific pod use:
+```
+kubectl describe pod hello-world
+```
