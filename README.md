@@ -264,3 +264,31 @@ Kubernetes is the world's most popular open-source container orchestration engin
 
 - For Docker, smallest deployable unit are Containers.
 - In Kubernetes, smallest deployable unit are Pods.
+
+### 9.2. How to create Pods
+
+- Pods can be created on 2 ways:
+  - Imperative management
+  - Declarative management
+
+#### 9.2.1. Imperative management
+
+- To create a new Pod you can use the command:
+```
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+```
+
+#### 9.2.2. Declarative management
+
+- This is by defining the exact same command like from above, but using a configuration file.
+- Usually a `.yml` configuration.
+
+#### 9.2.3. Declarative vs Imperative configuration
+
+- Imperative:
+  - Should be used mainly for learning purposes.
+  - Troubleshooting.
+  - Experimenting with something within your cluster.
+- Declarative:
+  - Reproducible, meaning you can take the same configuration and deploy it in multiple different environments.
+  - Best practices.
