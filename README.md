@@ -292,3 +292,21 @@ kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 - Declarative:
   - Reproducible, meaning you can take the same configuration and deploy it in multiple different environments.
   - Best practices.
+
+#### 9.2.4. Create Pods imperative command
+
+First create a new Pod:
+
+```
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+```
+
+Now to connect to our pod use the command:
+```
+kubectl port-forward pod/hello-world 8080:80
+```
+
+Test it on:
+```
+http://localhost:8080
+```
