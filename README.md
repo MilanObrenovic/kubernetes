@@ -275,7 +275,7 @@ Kubernetes is the world's most popular open-source container orchestration engin
 
 - To create a new Pod you can use the command:
 ```
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run <pod-name> --image=peopleoid/kubernetes:<pod-name> --port=80
 ```
 
 #### 9.2.2. Declarative management
@@ -298,12 +298,12 @@ kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 First create a new Pod:
 
 ```
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run <pod-name> --image=peopleoid/kubernetes:<pod-name> --port=80
 ```
 
 Now to connect to our pod use the command:
 ```
-kubectl port-forward pod/hello-world 8080:80
+kubectl port-forward pod/<pod-name> 8080:80
 ```
 
 Test it on:
@@ -322,7 +322,7 @@ kubectl apply -f pods/pod.yml
 
 Then to connect do:
 ```
-kubectl port-forward pod/hello-world 8080:80
+kubectl port-forward pod/<pod-name> 8080:80
 ```
 
 Test it on:
@@ -332,13 +332,14 @@ http://localhost:8080
 
 #### 9.2.6. Pod YAML config overview
 
+Here is an example of a Kubernetes pod defined in `pod.yml` file:
 ```yml
 apiVersion: v1
 # Tells Kubernetes that this is a Pod yml file
 kind: Pod
 metadata:
   # Name of this Pod
-  name: hello-world
+  name: <pod-name>
   labels:
     # Pod label
     app: hello-world
@@ -403,22 +404,39 @@ kubectl get namespaces
 
 To view all details and information about a specific pod use:
 ```
-kubectl describe pods hello-world
+kubectl describe pods <pod-name>
 ```
 
 ### 9.6. Formatting output
 
 Table format:
 ```
-kubectl get pods hello-world -o wide
+kubectl get pods <pod-name> -o wide
 ```
 
 YAML format:
 ```
-kubectl get pods hello-world -o yaml
+kubectl get pods <pod-name> -o yaml
 ```
 
 JSON format:
 ```
-kubectl get pods hello-world -o json
+kubectl get pods <pod-name> -o json
+```
+
+### 9.7. Logs
+
+To print pod logs:
+```
+kubectl logs <pod-name>
+```
+
+Follow logs (if an event happens it will be shown in real time):
+```
+kubectl logs <pod-name> -f
+```
+
+If there are multiple containers in a pod, to get logs of a specific container use command: 
+```
+kubectl logs <pod-name> -c <pod-name>
 ```
