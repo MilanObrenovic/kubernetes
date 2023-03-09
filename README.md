@@ -159,10 +159,10 @@ Kubernetes is the world's most popular open-source container orchestration engin
 ### 7.2. Container Runtime
 
 - Responsible for pulling images from container registries such as:
-  - Docker Hub
-  - GCR (Google Container Registry)
-  - ECR (Amazon Elastic Container Registry)
-  - ACR (Azure Container Registry)
+  - **Docker Hub**
+  - **GCR** (Google Container Registry)
+  - **ECR** (Amazon Elastic Container Registry)
+  - **ACR** (Azure Container Registry)
 - After pulling the images, it's also responsible for starting containers from those images and also stopping containers.
 - Abstracts container management for Kubernetes.
 - Within it, we have a Container Runtime Interface (CRI).
@@ -178,3 +178,48 @@ Kubernetes is the world's most popular open-source container orchestration engin
 - For example
   1. If two Pods want to talk to each other, Kube Proxy will handle that.
   2. If you as a client want to send a request to your cluster, Kube Proxy will handle all of that.
+
+## 8. Running Kubernetes
+
+- There are a couple of ways to run Kubernetes:
+  1. Run it yourself – which is super difficult.
+  2. Managed (Kubernetes) solution – this is what most companies use.
+     - **EKS** – Elastic Kubernetes Service
+     - **GKE** – Google Kubernetes Engine
+     - **AKS** – Azure Kubernetes Service
+
+## 8.1. Managed Kubernetes
+
+- What does it mean to be "managed"? It means you don't have to worry about Master Node as well as all the services that are run within the Master Node, such as the Scheduler, API Server etc.
+- All we then need to focus on are the Worker Nodes, which is where all the applications are run.
+
+## 8.2. EKS
+
+![img.png](misc/eks.png)
+
+- Managed solution from AWS.
+- They give you a cluster, and then you decide how you want to run your applications.
+- Currently, there are 2 ways:
+  - **AWS Fargate** (mainly for deploying serverless containers)
+    - Mainly for serverless containers (applications that don't need to be running all the time).
+  - **Amazon EC2** (place where you deploy your worker nodes for your EKS cluster)
+    - Used for long-running applications.
+
+## 8.3. Running Kube Cluster Locally
+
+![img.png](misc/running-kube-cluster-locally.png)
+
+- To create a local cluster, there are 3 main solutions:
+  - Minikube
+  - Kind
+  - Docker
+- These solutions are for learning Kubernetes.
+- Used for Local Development or CI.
+- **Important note:** DO NOT USE IT IN ANY ENVIRONMENT INCLUDING PRODUCTION.
+
+### 8.3.1. Minikube
+
+- Has great community.
+- Add-ons and lots of features.
+- Great documentation.
+- Installation: Docker + Minikube.
