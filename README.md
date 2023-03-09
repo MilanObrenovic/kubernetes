@@ -310,3 +310,22 @@ Test it on:
 ```
 http://localhost:8080
 ```
+
+#### 9.2.5. Create Pods using declarative configuration
+
+Example Pod can be found in this [pod.yml](pods/pod.yml) file.
+
+To create this Pod, use the command:
+```
+kubectl apply -f pods/pod.yml
+```
+
+Then to connect do:
+```
+kubectl port-forward pod/hello-world 8080:80
+```
+
+Test it on:
+```
+http://localhost:8080
+```
