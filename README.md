@@ -188,12 +188,12 @@ Kubernetes is the world's most popular open-source container orchestration engin
      - **GKE** – Google Kubernetes Engine
      - **AKS** – Azure Kubernetes Service
 
-## 8.1. Managed Kubernetes
+### 8.1. Managed Kubernetes
 
 - What does it mean to be "managed"? It means you don't have to worry about Master Node as well as all the services that are run within the Master Node, such as the Scheduler, API Server etc.
 - All we then need to focus on are the Worker Nodes, which is where all the applications are run.
 
-## 8.2. EKS
+### 8.2. EKS
 
 ![img.png](misc/eks.png)
 
@@ -205,7 +205,7 @@ Kubernetes is the world's most popular open-source container orchestration engin
   - **Amazon EC2** (place where you deploy your worker nodes for your EKS cluster)
     - Used for long-running applications.
 
-## 8.3. Running Kube Cluster Locally
+### 8.3. Running Kube Cluster Locally
 
 ![img.png](misc/running-kube-cluster-locally.png)
 
@@ -217,9 +217,50 @@ Kubernetes is the world's most popular open-source container orchestration engin
 - Used for Local Development or CI.
 - **Important note:** DO NOT USE IT IN ANY ENVIRONMENT INCLUDING PRODUCTION.
 
-### 8.3.1. Minikube
+#### 8.3.1. Minikube
+
+![img.png](misc/minikube.png)
 
 - Has great community.
 - Add-ons and lots of features.
 - Great documentation.
 - Installation: Docker + Minikube.
+- The goal is for our machine to interact with our cluster.
+  - The way to do this is to use a command line application called `cubectl`.
+
+### 8.4. KUBECTL
+
+- Kubernetes command line tool.
+- Run commands against your cluster.
+  - Deploy
+  - Inspect
+  - Edit resources
+  - Debug
+  - View logs
+  - Etc
+
+## 9. Pods
+
+![img.png](misc/pods.png)
+
+- In Kubernetes, a pod is the smallest deployable unit and not containers.
+- Within a Pod, there is always 1 main container.
+- The main container represents your application, whether it was written in NodeJS, JavaScript, Golang, etc.
+- You may or may not have an **Init Container**, which are executed before the **main container**.
+- Next, you may or may not have **Side Containers**.
+  - You can have 1 or 2 or however many you want, and also some side language (python, java, etc).
+  - Side containers are containers that support your Main Container.
+  - For example, you might have a side container that acts as a proxy to your main container.
+- Within Pods, you can have **Volumes**, and this is how containers share data between them.
+- The way these containers communicate with each other within a Pod, is through localhost and whatever port they expose to.
+- Every Pod itself has a unique IP address, which means if another Pod wants to talk to this Pod, it uses the unique IP address.
+- So, a Pod is a group of 1 or more containers.
+- Represents a running process.
+- Shares the same network and volumes.
+- Never create Pods on its own – use controllers instead.
+- Pods are ephemeral (short-lived) and disposable.
+
+### 9.1. Smallest Deployable Unit
+
+- For Docker, smallest deployable unit are Containers.
+- In Kubernetes, smallest deployable unit are Pods.
