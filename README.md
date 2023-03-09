@@ -329,3 +329,32 @@ Test it on:
 ```
 http://localhost:8080
 ```
+
+#### 9.2.6. Pod YAML config overview
+
+```yml
+apiVersion: v1
+# Tells Kubernetes that this is a Pod yml file
+kind: Pod
+metadata:
+  # Name of this Pod
+  name: hello-world
+  labels:
+    # Pod label
+    app: hello-world
+spec:
+  # Pod is a collection of 1 or more containers
+  containers:
+      # This container is named 'hello-world'
+    - name: hello-world
+      # Image name
+      image: peopleoid/kubernetes:hello-world
+      resources:
+        # This Pod can only access a certain amount of memory and cpu
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+          # This container is listening on port 80
+        - containerPort: 80
+```
