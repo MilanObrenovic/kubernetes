@@ -390,7 +390,7 @@ kubectl get all -A
 
 To search pods within a specific namespace:
 ```
-kubectl get pod -n kube-system
+kubectl get pods -n kube-system
 ```
 - `-n <namespace>` targets the namespace name.
 
@@ -403,5 +403,22 @@ kubectl get namespaces
 
 To view all details and information about a specific pod use:
 ```
-kubectl describe pod hello-world
+kubectl describe pods hello-world
+```
+
+### 9.6. Formatting output
+
+Table format:
+```
+kubectl get pods hello-world -o wide
+```
+
+YAML format:
+```
+kubectl get pods hello-world -o yaml
+```
+
+JSON format:
+```
+kubectl get pods hello-world -o json
 ```
