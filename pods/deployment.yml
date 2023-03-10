@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  labels:
+    app: hello-world
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hello-world
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  # This says it is tied to the template above
+  # The `app` value in template needs to match the `app` value in selector
+  selector:
+    matchLabels:
+      app: hello-world

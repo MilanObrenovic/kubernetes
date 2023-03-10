@@ -892,3 +892,15 @@ kubectl delete pods hello-world
   2. If we want to release a new version, Kubernetes will take care of the deployment for you.
   3. It will give you another version of the ReplicaSet (v2 for example), which will run alongside v1.
   4. Once everything looks good on v2, you will have no traffic going to v1 of your application.
+
+## 5.3. Creating Deployment
+
+1. We'll use the file [deployment.yml](pods/deployment.yml) to deploy the pod we currently have.
+2. To deploy it use the command:
+```console
+kubectl apply -f pods/deployment.yml
+```
+3. View the deployed pod and verify that it's running:
+```console
+kubectl get pods
+```
