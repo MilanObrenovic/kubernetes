@@ -866,3 +866,29 @@ kubectl delete pods hello-world
 ```
 - We just killed the last pod, and it doesn't self-heal. This is dangerous because if you have a real application, you always want at least one more pod replica running.
 - This is why deploying pods on its own like this doesn't give us enough flexibility.
+
+## 5.2. Deployments Overview
+
+### 5.2.1. Deployments
+
+- We should never use pods on its own.
+- Instead, we should manage pods through **deployments**.
+- Deployments is a Kubernetes resource which manages releases of new applications.
+- It provides zero downtime deployments.
+- Behind the scenes, it creates a replica set.
+
+![img.png](misc/deployments-1.png)
+
+- The way it works is:
+  1. You have a deployment.
+  2. The deployment creates a ReplicaSet.
+  3. ReplicaSet ensures the desired number of ports are always running.
+  4. In this case lets say we want to have 3 pods, so ReplicaSet will ensure we have 3 pods at all times.
+
+![img.png](misc/deployments-2.png)
+
+- The purpose of deployments is to facilitate software deployments. For example:
+  1. Let's say in this scenario we currently have version 1 of the application.
+  2. If we want to release a new version of the application, Kubernetes will take care of the deployment for you.
+  3. It will give you another version of the ReplicaSet (v2 for example), which will run alongside v1.
+  4. Once everything looks good on v2, you will have no traffic going to v1 of your application.
