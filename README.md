@@ -889,6 +889,6 @@ kubectl delete pods hello-world
 
 - The purpose of deployments is to facilitate software deployments. For example:
   1. Let's say in this scenario we currently have version 1 of the application.
-  2. If we want to release a new version of the application, Kubernetes will take care of the deployment for you.
+  2. If we want to release a new version, Kubernetes will take care of the deployment for you.
   3. It will give you another version of the ReplicaSet (v2 for example), which will run alongside v1.
   4. Once everything looks good on v2, you will have no traffic going to v1 of your application.
