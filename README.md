@@ -463,3 +463,11 @@ To view a list of all resources:
 ```console
 kubectl api-resources
 ```
+
+### 9.10. Kubectl cheatsheet
+
+Use command:
+```console
+kubectl --help
+```
+Full cheatsheet can be found on https://kubernetes.io/docs/reference/kubectl/cheatsheet/
