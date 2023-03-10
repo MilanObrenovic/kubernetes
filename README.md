@@ -274,7 +274,7 @@ Kubernetes is the world's most popular open-source container orchestration engin
 #### 9.2.1. Imperative management
 
 - To create a new Pod you can use the command:
-```
+```console
 kubectl run <pod-name> --image=peopleoid/kubernetes:<pod-name> --port=80
 ```
 
@@ -297,17 +297,17 @@ kubectl run <pod-name> --image=peopleoid/kubernetes:<pod-name> --port=80
 
 First create a new Pod:
 
-```
+```console
 kubectl run <pod-name> --image=peopleoid/kubernetes:<pod-name> --port=80
 ```
 
 Now to connect to our pod use the command:
-```
+```console
 kubectl port-forward pod/<pod-name> 8080:80
 ```
 
 Test it on:
-```
+```console
 http://localhost:8080
 ```
 
@@ -316,17 +316,17 @@ http://localhost:8080
 Example Pod can be found in this [pod.yml](pods/pod.yml) file.
 
 To create this Pod, use the command:
-```
+```console
 kubectl apply -f pods/pod.yml
 ```
 
 Then to connect do:
-```
+```console
 kubectl port-forward pod/<pod-name> 8080:80
 ```
 
 Test it on:
-```
+```console
 http://localhost:8080
 ```
 
@@ -363,96 +363,103 @@ spec:
 ### 9.3. Create and delete resources
 
 Check all pods:
-```
+```console
 kubectl get pods
 ```
 
 Delete specific pod:
-```
+```console
 kubectl delete pod <pod-name>
 ```
 
 ### 9.4. List resources
 
 To list all pods from ALL namespaces:
-```
+```console
 kubectl get pods -A
 ```
 
 To list EVERYTHING (not just pods) within the default namespace:
-```
+```console
 kubectl get all
 ```
 
 To list EVERYTHING (not just pods) within ALL namespaces:
-```
+```console
 kubectl get all -A
 ```
 
 To search pods within a specific namespace:
-```
+```console
 kubectl get pods -n kube-system
 ```
 - `-n <namespace>` targets the namespace name.
 
 Find all existing namespaces:
-```
+```console
 kubectl get namespaces
 ```
 
 ### 9.5. Kubectl Describe
 
 To view all details and information about a specific pod use:
-```
+```console
 kubectl describe pods <pod-name>
 ```
 
 ### 9.6. Formatting output
 
 Table format:
-```
+```console
 kubectl get pods <pod-name> -o wide
 ```
 
 YAML format:
-```
+```console
 kubectl get pods <pod-name> -o yaml
 ```
 
 JSON format:
-```
+```console
 kubectl get pods <pod-name> -o json
 ```
 
 ### 9.7. Logs
 
 To print pod logs:
-```
+```console
 kubectl logs <pod-name>
 ```
 
 Follow logs (if an event happens it will be shown in real time):
-```
+```console
 kubectl logs <pod-name> -f
 ```
 
 If there are multiple containers in a pod, to get logs of a specific container use command: 
-```
+```console
 kubectl logs <pod-name> -c <pod-name>
 ```
 
 ### 9.8. Shell access to a running Pod
 
 To enter a pod via terminal in interactive mode (`-it` parameter):
-```
+```console
 kubectl exec -it hello-world -- bash
 ```
 Or if it requires SSH:
-```
+```console
 kubectl exec -it hello-world -- sh
 ```
 Similarly, if there are multiple containers, to enter a specific one use command:
-```
+```console
 kubectl exec -it hello-world -c hello-world -- sh
 ```
 Entering into containers like this is usually used for debugging purposes.
+
+### 9.9. List all resource types
+
+To view a list of all resources:
+```console
+kubectl api-resources
+```
