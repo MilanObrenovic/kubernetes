@@ -850,3 +850,19 @@ Full cheatsheet can be found on https://kubernetes.io/docs/reference/kubectl/che
 ```console
 kubectl --help
 ```
+
+# 5. Deployments
+
+## 5.1. Don't Use Pods On Its Own
+
+### 5.1.1. The Truth About Pods
+
+- When it comes to pods, you should never deploy pods using `kind:Pod`.
+- As an example, the file [pod.yml](pods/pod.yml) is of `kind: Pod`.
+- Don't treat pods like pets, because they are ephemeral (lives for a very short period of time).
+- Pods on its own don't self-heal. For example if you delete a single pod:
+```console
+kubectl delete pods hello-world
+```
+- We just killed the last pod, and it doesn't self-heal. This is dangerous because if you have a real application, you always want at least one more pod replica running.
+- This is why deploying pods on its own like this doesn't give us enough flexibility.
