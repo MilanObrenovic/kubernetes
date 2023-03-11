@@ -969,20 +969,39 @@ kubectl describe rs hello-world-5d9b5cdd77
 - **Important:** using port forwarding like this is meant to be used for debugging purposes.
 - In reality services should be used instead of port-forwarding.
 
-1. In [deployment.yml](pods/deployment.yml), update config so that `replicas: 3`.
-2. Now check how many pods are running (should be 3):
+1. Check if `hello-world` pod is running:
 ```console
 kubectl get pods
 ```
-3. Also verify that a single deployment is running 3 pods:
+2. Verify that a single deployment is running a pod:
 ```console
 kubectl get deployment
 ```
-4. Now let's connect to this deployment:
+3. Now let's connect to this deployment:
 ```console
 kubectl port-forward deployment/hello-world 8080:80
 ```
-5. Verify that it works:
+4. Verify that it works:
 ```console
 http://localhost:8080/
+```
+
+## 5.8. Scaling Deployment Replicas
+
+1. In [deployment.yml](pods/deployment.yml), update config so that `replicas: 3`.
+2. Apply those changes:
+```console
+kubectl apply -f pods/deployment.yml
+```
+3. Check how many pods are running (should be 3 now):
+```console
+kubectl get pods
+```
+4. Verify if there are 3 ReplicaSets:
+```console
+kubectl get rs
+```
+5. Verify the deployment is running 3 pods:
+```console
+kubectl get deployment
 ```
