@@ -940,3 +940,26 @@ kubectl delete -f pods/deployment.yml
 
 - The way Replica Sets manage to do this is using something called Control Loops.
 - ReplicaSets implement a background control loop that checks the desired number of pods are always present on the cluster.
+
+## 5.6. Listing Replica Sets
+
+- Never create a ReplicaSet on its own, because when you create a deployment, it will create a ReplicaSet for us – always use deployments!
+- Make sure not to delete ReplicaSet, because it's managed by the deployment.
+- If you want to delete a ReplicaSet, delete the whole deployment.
+
+1. View all created ReplicaSets:
+```console
+kubectl get replicaset
+```
+2. To view details and information about ReplicaSets:
+```console
+kubectl describe replicaset
+```
+or
+```console
+kubectl describe rs
+```
+3. To view details and information about a specific ReplicaSet:
+```console
+kubectl describe rs hello-world-5d9b5cdd77
+```
