@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: hello-world
-      image: nginx
+      image: peopleoid/kubernetes:hello-world
       resources:
         limits:
           memory: "128Mi"

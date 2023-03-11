@@ -1,3 +1,13 @@
+# 0. Prerequisites
+
+- First make sure to install example Docker images located in [docker-images](docker-images) directory.
+- You can do it via standard Docker commands, or just run the devops file `update.sh` located in each subdirectory by running the command:
+```console
+docker-images/hello-world/update.sh
+docker-images/hello-world-v2/update.sh
+```
+- These two images will be used as examples for this Kubernetes learning documentation.
+
 # 1. Getting Started
 
 The goal here is to master Kubernetes from A to Z.
@@ -360,7 +370,7 @@ kubectl version --output=yaml
 
 1. First make sure the Docker is up and running:
 ```console
-docker run --rm -p 80:80 nginx
+docker run --rm -p 80:80 peopleoid/kubernetes:hello-world
 ```
 2. This is currently running on Docker. To confirm this works navigate to:
 ```console
@@ -368,7 +378,7 @@ http://localhost:8080/
 ```
 3. To run it via Kubernetes:
 ```console
-kubectl run hello-world --image=nginx --port=80
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 4. A new Pod was just created. To verify this use command:
 ```console
@@ -409,7 +419,7 @@ kubectl get pods -A
 ```
 4. Let's create a new Pod again:
 ```console
-kubectl run hello-world --image=nginx --port=80
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 5. Verify the Pod was created:
 ```console
@@ -563,7 +573,7 @@ minikube logs --node=minikube-m02
 
 - Pods can be created using an **imperative** command such as:
 ```console
-kubectl run hello-world --image=nginx --port=80
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 - The other approach is to use a declarative configuration.
 - Declarative configuration defines the exact same command as imperative, but it's using a configuration (usually `.yml`) file such as:
@@ -577,7 +587,7 @@ metadata:
 spec:
   containers:
     - name: hello-world
-      image: nginx
+      image: peopleoid/kubernetes:hello-world
       resources:
         limits:
           memory: "128Mi"
@@ -612,7 +622,7 @@ kubectl get pods
 ```
 2. Now use the **imperative** command to create the Pod:
 ```console
-kubectl run hello-world --image=nginx --port=80
+kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 3. Check again and verify this newly created Pod is running:
 ```console
@@ -674,7 +684,7 @@ spec:
       # This container is named 'hello-world'
     - name: hello-world
       # Image name
-      image: nginx
+      image: peopleoid/kubernetes:hello-world
       resources:
         # This Pod can only access a certain amount of memory and cpu
         limits:
@@ -1020,3 +1030,37 @@ kubectl get deployment
 - Rolling update simply means you have a new version of the application.
 - For example, if we have a new version of the application (lets say v2), then we want Kubernetes to take care of the rolling update for us.
 - Let's say we have 2 Replica Sets, and in Kubernetes once v2 is up and running or fine, it simply scales down v1 and no traffic is sent.
+
+## 6.2. Rolling Updates In Action
+
+1. View all pods and make sure there are 3 replica pods running:
+```console
+kubectl get pods
+```
+2. Port forward this deployment:
+```console
+kubectl port-forward deployment/hello-world 8080:80
+```
+3. Now we'll make v2 of this exact same application.
+The only thing we really have to change is the image name,
+because image name uniquely identifies every version of the application:
+```yml
+image: peopleoid/kubernetes:hello-world-v2
+```
+Also add this under `labels: app: hello-world` key:
+```yml
+annotations:
+  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v2"
+```
+4. Now redeploy:
+```console
+kubectl apply -f pods/deployment.yml
+```
+5. Connect again:
+```console
+kubectl port-forward deployment/hello-world 8080:80
+```
+6. Verify if this time the web page was changed into v2:
+```console
+http://localhost:8080/
+```
