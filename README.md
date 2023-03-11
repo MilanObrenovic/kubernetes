@@ -117,7 +117,7 @@ It offers the ability to schedule and manage containers.
 
 #### 1.2.4.2. ReplicaSet Controller
 
-- Responsible for ensuring that we have the correct number of ports running.
+- Responsible for ensuring that we have the correct number of pods running.
 
 #### 1.2.4.3. Endpoint Controller
 
@@ -882,7 +882,7 @@ kubectl delete pods hello-world
 - The way it works is:
   1. You have a deployment.
   2. The deployment creates a ReplicaSet.
-  3. ReplicaSet ensures the desired number of ports are always running.
+  3. ReplicaSet ensures the desired number of pods are always running.
   4. In this case lets say we want to have 3 pods, so ReplicaSet will ensure we have 3 pods at all times.
 
 ![img.png](misc/deployments-2.png)
@@ -923,3 +923,20 @@ kubectl delete deployment hello-world
 ```console
 kubectl delete -f pods/deployment.yml
 ```
+
+## 5.5. Replica Sets Overview
+
+### 5.5.1. ReplicaSet
+
+![img.png](misc/replicaset.png)
+
+- When you create a deployment, it gives us something called a ReplicaSet.
+- ReplicaSet is a resource in Kubernetes, which ensures the desired number of pods are always running.
+- It is recommended to have at least 3 replicas of the same version.
+
+### 5.5.2. Control Loops
+
+![img.png](misc/control-loops.png)
+
+- The way Replica Sets manage to do this is using something called Control Loops.
+- ReplicaSets implement a background control loop that checks the desired number of pods are always present on the cluster.
