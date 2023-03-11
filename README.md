@@ -1064,3 +1064,33 @@ kubectl port-forward deployment/hello-world 8080:80
 ```console
 http://localhost:8080/
 ```
+
+## 6.3. Rollbacks
+
+- When we deploy a new version (v2 for example), Kubernetes is not actually deleting the old version (v1 for example) ReplicaSet.
+- The reason it works like this is so it can perform rollbacks in case we need it.
+
+1. To see this, view all ReplicaSets:
+```console
+kubectl get rs
+```
+2. View history of rollbacks:
+```console
+kubectl rollout history deployment hello-world
+```
+3. To roll back to a specific deployment, use command:
+```console
+kubectl rollout undo deployment hello-world
+```
+4. Verify if these changes took effect. The highest number under `REVISION` column is our currently active deployment:
+```console
+kubectl rollout history deployment hello-world
+```
+5. Verify on localhost if the older version is now showing:
+```console
+http://localhost:8080/
+```
+6. To review history of deployment for a specific revision:
+```console
+kubectl rollout history deployment hello-world --revision=4
+```
