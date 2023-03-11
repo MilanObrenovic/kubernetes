@@ -1005,3 +1005,18 @@ kubectl get rs
 ```console
 kubectl get deployment
 ```
+
+# 6. Deployment And Rolling Updates
+
+- To recap: when we have deployment, we have ReplicaSet, and then within ReplicaSet we specify the number of replicas that we want.
+- So far, we scaled our deployment to 3 pods.
+
+## 6.1. Rolling Updates
+
+### 6.1.1. Deployments
+
+![img.png](misc/deployments-3.png)
+
+- Rolling update simply means you have a new version of the application.
+- For example, if we have a new version of the application (lets say v2), then we want Kubernetes to take care of the rolling update for us.
+- Let's say we have 2 Replica Sets, and in Kubernetes once v2 is up and running or fine, it simply scales down v1 and no traffic is sent.
