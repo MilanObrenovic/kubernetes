@@ -904,3 +904,22 @@ kubectl apply -f pods/deployment.yml
 ```console
 kubectl get pods
 ```
+
+## 5.4. Managing Deployments
+
+1. To view all deployments:
+```console
+kubectl get deployments
+```
+2. To view all details and information regarding specific deployment:
+```console
+kubectl describe deployment hello-world
+```
+3. To delete a specific deployment:
+```console
+kubectl delete deployment hello-world
+```
+4. Alternatively, you can also target the `.yml` file and delete the deployment that way:
+```console
+kubectl delete -f pods/deployment.yml
+```
