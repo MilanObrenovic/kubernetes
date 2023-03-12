@@ -1128,3 +1128,11 @@ http://localhost:8080/
 ```console
 kubectl rollout history deployment hello-world
 ```
+
+## 6.5. Revision History Limit
+
+- To view more revisions, increase revision history limit in [deployment.yml](pods/deployment.yml) file:
+```yml
+revisionHistoryLimit: 20
+```
+- By default, it's set to 10.
