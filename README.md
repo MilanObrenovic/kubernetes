@@ -5,6 +5,7 @@
 ```console
 docker-images/hello-world/update.sh
 docker-images/hello-world-v2/update.sh
+docker-images/hello-world-v3/update.sh
 ```
 - These two images will be used as examples for this Kubernetes learning documentation.
 
@@ -1093,4 +1094,37 @@ http://localhost:8080/
 6. To review history of deployment for a specific revision:
 ```console
 kubectl rollout history deployment hello-world --revision=4
+```
+
+## 6.4. Manage Your Cluster Using Declarative Approach
+
+- Ever since we rolled back to v1, you can notice how in our [deployment.yml](pods/deployment.yml) it still says we have deployed `hello-world-v2`, so this might get confusing.
+- Updates should be done using **declarative** approach and not **imperative**.
+  - That's because usually as you work in a team of engineers, they can see all the changes you've done through git version control system.
+  - But using **imperative** commands can't be tracked through git.
+
+1. Modify [deployment.yml](pods/deployment.yml) file so that it uses `hello-world-v3`:
+```yml
+...
+annotations:
+  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v3"
+...
+image: peopleoid/kubernetes:hello-world-v3
+...
+```
+2. Apply these changes:
+```console
+kubectl apply -f pods/deployment.yml
+```
+3. Connect again:
+```console
+kubectl port-forward deployment/hello-world 8080:80
+```
+4. Verify if this time the web page was changed into v3:
+```console
+http://localhost:8080/
+```
+5. Check one more time if v3 is the latest revision active:
+```console
+kubectl rollout history deployment hello-world
 ```

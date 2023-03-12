@@ -12,11 +12,11 @@ spec:
       labels:
         app: hello-world
       annotations:
-        kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v2"
+        kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v3"
     spec:
       containers:
         - name: hello-world
-          image: peopleoid/kubernetes:hello-world-v2
+          image: peopleoid/kubernetes:hello-world-v3
           resources:
             limits:
               memory: "128Mi"
