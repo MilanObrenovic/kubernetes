@@ -1279,3 +1279,31 @@ kubectl port-forward deployment/customer 8080:8080
 ```console
 http://localhost:8080/api/v1/customer
 ```
+
+## 7.3. Exercise
+
+![img.png](misc/deployment-order-microservice.png)
+
+To do:
+
+1. Create a deployment yaml for the **order microservice** so that we can have these two microservices talk to each other using **Kubernetes Services**.
+
+## 7.4. Exercise Solution
+
+1. Create [order-deployment.yml](yamls/order-deployment.yml) file as a Kubernetes deployment.
+2. Apply those changes:
+```console
+kubectl apply -f yamls/order-deployment.yml
+```
+3. Confirm that you have 2 replica pods of order microservice:
+```console
+kubectl get pods
+```
+4. Connect with port forward:
+```console
+kubectl port-forward deployment/order 8080:8081
+```
+5. Check the URL (it should return an empty list because currently `order` microservice is not talking to the `customer` microservice):
+```console
+http://localhost:8080/api/v1/order/customer/1
+```
