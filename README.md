@@ -6,6 +6,7 @@
 docker-images/hello-world/update.sh
 docker-images/hello-world-v2/update.sh
 docker-images/hello-world-v3/update.sh
+docker-images/hello-world-v4/update.sh
 ```
 - These two images will be used as examples for this Kubernetes learning documentation.
 
@@ -1136,3 +1137,58 @@ kubectl rollout history deployment hello-world
 revisionHistoryLimit: 20
 ```
 - By default, it's set to 10.
+
+## 6.6. Configure Deployment Rolling Strategy
+
+### 6.6.1. Deployment Strategy
+
+- In Kubernetes, when it comes to deploy a new version of our application, within the deployment itself we can use 2 strategies:
+  - **Recreate** strategy
+    - Deletes every single pod that is running before it recreates a new version of your application.
+    - This is very dangerous because if you have users using your application, you will have downtime.
+  - **Rolling Update** strategy
+    - This is the preferred and default strategy set by Kubernetes.
+    - Makes sure the application keeps on receiving traffic from previous version, while the new version is up and running.
+    - Alternates the traffic to the new version when the new version is healthy.
+
+1. In [deployment.yml](pods/deployment.yml) add this below `spec` key:
+```yml
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+```
+2. Increase the number of replicas to 5:
+```yml
+replicas: 5
+```
+3. Update application version to v4:
+```yml
+...
+annotations:
+  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v4"
+...
+image: peopleoid/kubernetes:hello-world-v4
+...
+```
+4. Apply these changes:
+```console
+kubectl apply -f pods/deployment.yml
+```
+5. Verify if these changes have rolled out:
+```console
+kubectl rollout status deployment hello-world
+```
+6. Verify if there are 5 pods now:
+```console
+kubectl get pods
+```
+7. Connect to this Pod using the command:
+```console
+kubectl port-forward deployment/hello-world 8080:80
+```
+8. Verify if the v4 is running on localhost:
+```console
+http://localhost:8080/
+```

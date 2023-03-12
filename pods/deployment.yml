@@ -5,19 +5,26 @@ metadata:
   labels:
     app: hello-world
 spec:
-  replicas: 3
-  revisionHistoryLimit: 10
+  replicas: 5
+  revisionHistoryLimit: 20
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # We want a maximum of 1 pod to be unavailable
+      maxUnavailable: 1
+      # Never have more than 1 pod above the desired state (must be <= number of replicas)
+      maxSurge: 1
   template:
     metadata:
       name: hello-world
       labels:
         app: hello-world
       annotations:
-        kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v3"
+        kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v4"
     spec:
       containers:
         - name: hello-world
-          image: peopleoid/kubernetes:hello-world-v3
+          image: peopleoid/kubernetes:hello-world-v4
           resources:
             limits:
               memory: "128Mi"
