@@ -644,7 +644,7 @@ http://localhost:8080
 - Another way we can create Kubernetes objects is using a yaml file.
 - Yaml is a serialization language used to format configuration files.
 
-1. Example Pod can be found in this [pod.yml](pods/pod.yml) file.
+1. Example Pod can be found in this [pod.yml](yamls/pod.yml) file.
 2. Check if there is already a `hello-world` Pod:
 ```console
 kubectl get pods
@@ -870,7 +870,7 @@ kubectl --help
 ### 5.1.1. The Truth About Pods
 
 - When it comes to pods, you should never deploy pods using `kind:Pod`.
-- As an example, the file [pod.yml](pods/pod.yml) is of `kind: Pod`.
+- As an example, the file [pod.yml](yamls/pod.yml) is of `kind: Pod`.
 - Don't treat pods like pets, because they are ephemeral (lives for a very short period of time).
 - Pods on its own don't self-heal. For example if you delete a single pod:
 ```console
@@ -907,7 +907,7 @@ kubectl delete pods hello-world
 
 ## 5.3. Creating Deployment
 
-1. We'll use the file [deployment.yml](pods/deployment.yml) to deploy the pod we currently have.
+1. We'll use the file [deployment.yml](yamls/deployment.yml) to deploy the pod we currently have.
 2. To deploy it use the command:
 ```console
 kubectl apply -f pods/deployment.yml
@@ -1000,7 +1000,7 @@ http://localhost:8080/
 
 ## 5.8. Scaling Deployment Replicas
 
-1. In [deployment.yml](pods/deployment.yml), update config so that `replicas: 3`.
+1. In [deployment.yml](yamls/deployment.yml), update config so that `replicas: 3`.
 2. Apply those changes:
 ```console
 kubectl apply -f pods/deployment.yml
@@ -1099,12 +1099,12 @@ kubectl rollout history deployment hello-world --revision=4
 
 ## 6.4. Manage Your Cluster Using Declarative Approach
 
-- Ever since we rolled back to v1, you can notice how in our [deployment.yml](pods/deployment.yml) it still says we have deployed `hello-world-v2`, so this might get confusing.
+- Ever since we rolled back to v1, you can notice how in our [deployment.yml](yamls/deployment.yml) it still says we have deployed `hello-world-v2`, so this might get confusing.
 - Updates should be done using **declarative** approach and not **imperative**.
   - That's because usually as you work in a team of engineers, they can see all the changes you've done through git version control system.
   - But using **imperative** commands can't be tracked through git.
 
-1. Modify [deployment.yml](pods/deployment.yml) file so that it uses `hello-world-v3`:
+1. Modify [deployment.yml](yamls/deployment.yml) file so that it uses `hello-world-v3`:
 ```yml
 ...
 annotations:
@@ -1132,7 +1132,7 @@ kubectl rollout history deployment hello-world
 
 ## 6.5. Revision History Limit
 
-- To view more revisions, increase revision history limit in [deployment.yml](pods/deployment.yml) file:
+- To view more revisions, increase revision history limit in [deployment.yml](yamls/deployment.yml) file:
 ```yml
 revisionHistoryLimit: 20
 ```
@@ -1151,7 +1151,7 @@ revisionHistoryLimit: 20
     - Makes sure the application keeps on receiving traffic from previous version, while the new version is up and running.
     - Alternates the traffic to the new version when the new version is healthy.
 
-1. In [deployment.yml](pods/deployment.yml) add this below `spec` key:
+1. In [deployment.yml](yamls/deployment.yml) add this below `spec` key:
 ```yml
 strategy:
   type: RollingUpdate
@@ -1234,3 +1234,48 @@ kubectl rollout resume deployments hello-world
 - NodePort
 - ExternalName
 - LoadBalancer
+
+## 7.2. Customer Microservice Deployment
+
+1. First, deploy two microservices using Docker by running the automated bash script:
+```console
+microservices/deploy.sh
+```
+2. In [yamls](yamls) directory create a new [customer-deployment.yml](yamls/customer-deployment.yml) file. This customer microservice will be running on port 8080 and will have 2 replicas.
+3. Let's also scale down [deployment.yml](yamls/deployment.yml) from 5 to 2 replicas.
+4. Now apply these changes:
+```console
+kubectl apply -f yamls/deployment.yml
+```
+5. Verify there are 2 `hello-world` pods running:
+```console
+kubectl get pods
+```
+6. Now apply changes for customer microservice:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+7. View pods again and make sure there are 2 pods of customer microservice:
+```console
+kubectl get pods
+```
+8. View logs of an individual customer microservice just to see that it's running on the correct port:
+```console
+kubectl logs customer-6cb7ff79b6-2ccmv
+```
+9. View all the pods, services, deployments and replicas:
+```console
+kubectl get all
+```
+10. View all deployments running right now:
+```console
+kubectl get deployments
+```
+11. Port forward the customer microservice:
+```console
+kubectl port-forward deployment/customer 8080:8080
+```
+12. Confirm that you can access the GET API route from customer microservice:
+```console
+http://localhost:8080/api/v1/customer
+```

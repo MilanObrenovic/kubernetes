@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer
+  labels:
+    app: customer
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: customer
+      labels:
+        app: customer
+    spec:
+      containers:
+        - name: customer
+          image: peopleoid/kubernetes:customer-v1
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: customer
