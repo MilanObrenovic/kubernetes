@@ -20,6 +20,9 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          env:
+            - name: ORDER_SERVICE
+              value: "10.244.0.39:8081"
           ports:
             - containerPort: 8080
       restartPolicy: Always

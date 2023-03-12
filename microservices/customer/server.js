@@ -21,12 +21,12 @@ let router = express.Router();
 app.use(actuator());
 app.use(cors());
 
-router.get("/api/v1/customer", function(req, res) {
+router.get("/api/v1/customers", function(req, res) {
 	res.json(customers);
 });
 
-router.get("/api/v1/customer/:id/orders", function(req, res) {
-	const url = `http://${ORDER_SERVICE}/api/v1/order/customer/${req.params.id}`;
+router.get("/api/v1/customers/:id/orders", function(req, res) {
+	const url = `http://${ORDER_SERVICE}/api/v1/orders/customers/${req.params.id}`;
 	axios.get(url)
 		.then(response => {
 			res.json(response.data);

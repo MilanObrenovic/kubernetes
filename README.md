@@ -1277,7 +1277,7 @@ kubectl port-forward deployment/customer 8080:8080
 ```
 12. Confirm that you can access the GET API route from customer microservice:
 ```console
-http://localhost:8080/api/v1/customer
+http://localhost:8080/api/v1/customers
 ```
 
 ## 7.3. Exercise
@@ -1305,5 +1305,49 @@ kubectl port-forward deployment/order 8080:8081
 ```
 5. Check the URL (it should return an empty list because currently `order` microservice is not talking to the `customer` microservice):
 ```console
-http://localhost:8080/api/v1/order/customer/1
+http://localhost:8080/api/v1/orders/customers/1
+```
+
+## 7.5. Microservice Communication Using Pod IP Address
+
+- In this example we'll use a direct pod IP address to communicate amongst microservices.
+- This is a BAD approach and in real development should not be done this way.
+
+1. Show all pods:
+```console
+kubectl get pods
+```
+2. View details of a specific pod, lets say an order microservice:
+```console
+kubectl describe pods order-778c484f7c-46h2w
+```
+3. Grab its IP address and add it to [customer-deployment.yml](yamls/customer-deployment.yml) file for the container `customer`:
+```yml
+env:
+  - name: ORDER_SERVICE
+    value: "10.244.0.39:8081"
+```
+4. Apply these changes:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+5. Port forward the customer microservice:
+```console
+kubectl port-forward deployment/customer 8080:8080
+```
+6. Check if it works:
+```console
+http://localhost:8080/api/v1/customers/1/orders
+```
+7. Here's the problem with this approach. Let's delete the order microservice:
+```console
+kubectl delete -f yamls/order-deployment.yml
+```
+8. Now let's create the order microservice again:
+```console
+kubectl apply -f yamls/order-deployment.yml
+```
+9. Try to access the same localhost url. It should not work anymore because there's a new pod IP address assigned to the order microservice:
+```console
+http://localhost:8080/api/v1/customers/1/orders
 ```

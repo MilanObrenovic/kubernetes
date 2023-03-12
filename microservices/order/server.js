@@ -16,8 +16,8 @@ let router = express.Router();
 
 app.use(actuator());
 
-router.get("/api/v1/order/customer/:customerId", function(req, res) {
-	const customerOrders = orders.find(o =>  o.customerId === req.params.customerId);
+router.get("/api/v1/orders/customers/:customerId", function(req, res) {
+	const customerOrders = orders.find(o =>  o.customerId == req.params.customerId);
 	if (customerOrders) {
 		return res.json(customerOrders);
 	}
