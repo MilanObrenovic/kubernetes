@@ -1192,3 +1192,45 @@ kubectl port-forward deployment/hello-world 8080:80
 ```console
 http://localhost:8080/
 ```
+
+## 6.7. Pausing And Resuming Rollouts
+
+- Let's say that we are in the middle of a rollout, but now let's say we spotted a bug, so we want to pause that rollout.
+
+1. To pause a rollout use command:
+```console
+kubectl rollout pause deployments hello-world 
+```
+2. After fixing the bug, to resume that rollout use command:
+```console
+kubectl rollout resume deployments hello-world 
+```
+
+# 7. Services
+
+- So far we connected to the application using **imperative** `kubectl port-forward` command.
+
+## 7.1. Kubernetes Service
+
+### 7.1.1. Services
+
+![img.png](misc/services.png)
+
+- Using port-forwarding should be used only for testing purposes.
+- Instead of accessing/connecting to the app using port-forward, we should be using **services**.
+- To recap, we have a **Deployment**, which has a **ReplicaSet**, which manages individual **Pods**, and each pod has its own unique IP address.
+- Now let's say we have a client who wants to access the application.
+- We can't use the pod IP address because pods are short-lived, they are not reliable.
+  - Instead of that approach, we need to use services.
+  - If we scale up or down, pods get a new IP address.
+  - Never rely on pod IP address.
+- Service IP address is reliable and stable because it never changes.
+- Service comes with a stable DNS name and a stable Port.
+- Clients should be talking to services if they want to use our application, instead of using port-forwarding.
+
+### 7.1.2. Types Of Services
+
+- ClusterIP (default)
+- NodePort
+- ExternalName
+- LoadBalancer
