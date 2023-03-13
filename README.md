@@ -1427,3 +1427,88 @@ kubectl describe service order
 ```console
 kubectl get endpoints
 ```
+
+## 7.8. ClusterIP Service In Action
+
+1. Describe the `order` microservice:
+```console
+kubectl describe service order
+```
+2. Take the IP address and plug it in [customer-deployment.yml](yamls/customer-deployment.yml) file:
+```yml
+env:
+  - name: ORDER_SERVICE
+    value: "10.109.216.231:8081"
+```
+3. Apply these changes:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+4. View all services:
+```console
+kubectl get services
+```
+- There should be `kubernetes` and `order` services, both having only ClusterIP and none for ExternalIP.
+5. To check which services can be deployed, run command:
+```console
+kubectl get deploy
+```
+6. Now port-forward the customer microservice:
+```console
+kubectl port-forward deployment/customer 8080:8080
+```
+7. Test on localhost. Before we had a connection timeout, but now we're using the service:
+```console
+http://localhost:8080/api/v1/customers/1/orders
+```
+- This should return 1 record.
+```console
+http://localhost:8080/api/v1/customers/3/orders
+```
+- This should return an empty list because there are no orders with ID=3.
+8. In [customer-deployment.yml](yamls/customer-deployment.yml), replace the service IP address with just `order`. Kubernetes is smart enough to find the IP address for this service:
+```yml
+env:
+  - name: ORDER_SERVICE
+    value: "order:8081"
+```
+9. Apply these changes:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+10. Port-forward the customer microservice once again:
+```console
+kubectl port-forward deployment/customer 8080:8080
+```
+11. Test on localhost and make sure everything still works like before:
+```console
+http://localhost:8080/api/v1/customers/1/orders
+```
+12. To eliminate the port as well, just set to `"order"` in [customer-deployment.yml](yamls/customer-deployment.yml) file:
+```yml
+env:
+  - name: ORDER_SERVICE
+    value: "order"
+```
+13. Then in [order-deployment.yml](yamls/order-deployment.yml), set port to `80`:
+```yml
+ports:
+  - port: 80
+    targetPort: 8081
+```
+14. Apply these changes for customer:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+15. Now apply changes for order:
+```console
+kubectl apply -f yamls/order-deployment.yml
+```
+16. Port-forward customer again:
+```console
+kubectl port-forward deployment/customer 8080:8080
+```
+17. Test on localhost and make sure everything still works like before:
+```console
+http://localhost:8080/api/v1/customers/1/orders
+```

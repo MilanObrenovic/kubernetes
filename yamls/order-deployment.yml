@@ -37,7 +37,7 @@ spec:
   selector:
     app: order
   ports:
-    - port: 8081
+    - port: 80
       targetPort: 8081
   # This can be omitted, because it's set by default.
   # ClusterIP is used only for internal communication.

@@ -22,7 +22,7 @@ spec:
               cpu: "500m"
           env:
             - name: ORDER_SERVICE
-              value: "10.244.0.39:8081"
+              value: "order"
           ports:
             - containerPort: 8080
       restartPolicy: Always
