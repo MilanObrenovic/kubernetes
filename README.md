@@ -1629,4 +1629,55 @@ minikube service customer-node
 ```bash
 http://127.0.0.1:60815/api/v1/customers
 ```
-- That's it! This is how you access your application using Node Ports.
+- That's it! This is how to access your application using Node Ports.
+
+## 7.12. NodePort With Random Port
+
+1. First, lets check the IP address of the `customer-node` service:
+```bash
+kubectl get services
+```
+- It should say `30000` because that's what we defined in `.yml` file.
+2. Now delete the `nodePort` in [customer-deployment.yml](yamls/customer-deployment.yml):
+```yml
+nodePort: 30000
+```
+3. Delete the existing service using the command:
+```bash
+kubectl delete svc customer-node
+```
+4. Apply these changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+5. Check the services again:
+```bash
+kubectl get services
+```
+- The port should now be random.
+6. Get the 2nd node IP address:
+```bash
+minikube ip -n minikube-m02
+```
+7. Ssh into it:
+```bash
+minikube ssh
+```
+8. Try to curl but using that random port now:
+```bash
+curl localhost:31127/api/v1/customers
+```
+10. Rename it from `customer-node` to `customer`:
+```yml
+metadata:
+  name: customer
+```
+9. Run the minikube service:
+```bash
+minikube service customer
+```
+10. Test the API url that was generated:
+```bash
+http://127.0.0.1:52960/api/v1/customers
+```
+11. Set the `nodePort` back to `30000`.
