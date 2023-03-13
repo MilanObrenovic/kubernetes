@@ -1512,3 +1512,32 @@ kubectl port-forward deployment/customer 8080:8080
 ```console
 http://localhost:8080/api/v1/customers/1/orders
 ```
+
+## 7.9. NodePort Service
+
+### 7.9.1. NodePort
+
+![img.png](misc/nodeport.png)
+
+- This type of service allows you to open a port on all nodes.
+- Port range: `30000` – `32767`.
+- NodePort works like this:
+  - Within our cluster, we currently have 2 nodes.
+  - Allows us to expose a port between the said range on all nodes.
+  - So if we have 2 nodes, lets say we set a port of `30001` on both nodes.
+  - Now if we have a client that wants to communicate with our application, the client sends a request directly to that node IP address and port.
+  - The client can choose if he wants to hit the first or second node (doesn't matter).
+    - Let's say the client hits the first node, the request goes through the first node.
+    - When the request reaches that port, the service handles that request and then sends it to particular pod.
+    - ![img.png](misc/nodeport-2.png)
+    - Now lets say in the first node, there are no pods, but the client still chooses to send a request to that specific node.
+    - What happens is, this request still goes to the service, but the service is responsible for sending the traffic to the appropriate pod.
+
+![img_1.png](misc/nodeport-3.png)
+- In regard to `.yml` configuration, `nodePort` property needs to be specified with a port value.
+  - If `nodePort` isn't specified, a random port between `30000` – `32767` is chosen.
+
+### 7.9.2. Disadvantages Of NodePort
+
+- There can only be 1 service per port.
+- If Node IP address changes, then we have a problem.
