@@ -1390,3 +1390,40 @@ spec:
 ```console
 kubectl apply -f yamls/order-deployment.yml
 ```
+
+## 7.7. Inspecting ClusterIP Service And Endpoints With KUBECTL
+
+- The goal is to get customer microservice to talk to order microservice.
+- But first we have to set the customer microservice to point to the service we created, instead using individual pod IP addresses.
+
+1. View all available services (should be `kubernetes` and `order`):
+```console
+kubectl get services
+```
+2. Get details and information about `order` microservice:
+```console
+kubectl describe service order
+```
+- The `Endpoints` describe IP + Port of healthy pods.
+3. To verify if this is true, get all pods:
+```console
+kubectl get pods
+```
+4. Grab and describe a specific `order` pod. Verify if its IP + Port matches one of the service `Endpoints` IP + Ports:
+```console
+kubectl describe pods order-778c484f7c-qg6c6
+```
+5. Update [order-deployment.yml](yamls/order-deployment.yml) file so that it has 3 replicas instead of 2.
+6. Apply those changes:
+```console
+kubectl apply -f yamls/order-deployment.yml
+```
+7. Describe `order` microservice once again to verify the `Endpoints` now has 3 IP addresses (3 pods):
+```console
+kubectl describe service order
+```
+8. Update [order-deployment.yml](yamls/order-deployment.yml) back to 2 replicas.
+9. You can also directly view all the available endpoints:
+```console
+kubectl get endpoints
+```
