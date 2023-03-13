@@ -1681,3 +1681,45 @@ minikube service customer
 http://127.0.0.1:52960/api/v1/customers
 ```
 11. Set the `nodePort` back to `30000`.
+
+## 7.13. Accessing NodePort Service Using ClusterIP Address
+
+- One last thing that can be done with Node Ports is to access the API internally.
+
+1. List all pods:
+```bash
+kubectl get pods
+```
+2. Execute into one of the order microservices as interactive mode:
+```bash
+kubectl exec -it order-778c484f7c-hkmt7 -- sh
+```
+3. We need to use the curl command, but it does not exist within this shell script. To add curl, use command:
+```bash
+apk add curl
+```
+4. Use the IP address of the `customer` microservice that you can find with command `kubectl get svc`:
+```bash
+curl http://10.103.211.235/api/v1/customers
+```
+5. Or, instead of IP address we can also say just `customer`:
+```bash
+curl http://customer/api/v1/customers
+```
+6. Go back to [customer-deployment.yml](yamls/customer-deployment.yml) and change the name back to `customer-node`:
+```yml
+metadata:
+  name: customer-node
+```
+7. Delete the `customer` because the port is already allocated:
+```bash
+kubectl delete svc customer
+```
+8. Now apply these changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+9. Verify the service is added:
+```bash
+kubectl get svc
+```
