@@ -2,7 +2,7 @@
 
 - First make sure to install example Docker images located in [docker-images](docker-images) directory.
 - You can do it via standard Docker commands, or just run the devops file `update.sh` located in each subdirectory by running the command:
-```console
+```bash
 docker-images/hello-world/update.sh
 docker-images/hello-world-v2/update.sh
 docker-images/hello-world-v3/update.sh
@@ -278,27 +278,27 @@ The goal is to install Minikube. But prerequisite to that is to have Docker inst
 1. To install Docker navigate to https://www.docker.com/
 2. Create a Docker Hub account and make sure you can create repositories here https://hub.docker.com/
 3. Test Docker version with command:
-```console
+```bash
 docker --version
 ```
 4. Pull a starter Docker image:
-```console
+```bash
 docker run -d -p 80:80 docker/getting-started
 ```
 5. Test if the container is pulled:
-```console
+```bash
 docker ps
 ```
 6. To see what was pulled navigate to:
-```console
+```bash
 http://localhost
 ```
 7. To stop a container:
-```console
+```bash
 docker stop <container-id>
 ```
 8. To remove a container which was stopped:
-```console
+```bash
 docker rm <container-id>
 ```
 
@@ -309,19 +309,19 @@ Once you have Docker installed, it's time to install Minikube.
 1. To install Minikube navigate to https://minikube.sigs.k8s.io/docs/
 2. Open **Get Started** tab https://minikube.sigs.k8s.io/docs/start/
 3. To get Minikube installed on a Mac use command:
-```console
+```bash
 brew install minikube
 ```
 4. Test Minikube version with command:
-```console
+```bash
 minikube version
 ```
 5. Start a Minikube cluster with command:
-```console
+```bash
 minikube start
 ```
 6. Check Minikube status with command:
-```console
+```bash
 minikube status
 ```
 7. Now you should successfully have a Kubernetes Cluster running on your local machine.
@@ -342,23 +342,23 @@ minikube status
 1. To install `kubectl` navigate to https://kubernetes.io/docs/tasks/tools/
 2. For Mac go to https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
 3. Follow the docs. But in short, to install it use this command:
-```console
+```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
 ```
 4. Make the `kubectl` binary executable:
-```console
+```bash
 chmod +x ./kubectl
 ```
 5. Move the `kubectl` binary to a file location on your system PATH:
-```console
+```bash
 sudo mv ./kubectl /usr/local/bin/kubectl
 ```
 6. Chown it to root privileges:
-```console
+```bash
 sudo chown root: /usr/local/bin/kubectl
 ```
 7. Test the details and version:
-```console
+```bash
 kubectl version --output=yaml
 ```
 
@@ -371,31 +371,31 @@ kubectl version --output=yaml
 - A Pod is a collection of 1 or more containers.
 
 1. First make sure the Docker is up and running:
-```console
+```bash
 docker run --rm -p 80:80 peopleoid/kubernetes:hello-world
 ```
 2. This is currently running on Docker. To confirm this works navigate to:
-```console
+```bash
 http://localhost:8080/
 ```
 3. To run it via Kubernetes:
-```console
+```bash
 kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 4. A new Pod was just created. To verify this use command:
-```console
+```bash
 kubectl get pods
 ```
 5. To access this pod:
-```console
+```bash
 kubectl port-forward pod/hello-world pod/hello-world 8080:80
 ```
 6. Now the application is deployed using Kubernetes. To confirm this works navigate to:
-```console
+```bash
 http://localhost:8080/
 ```
 7. To delete a Pod:
-```console
+```bash
 kubectl delete pods hello-world
 ```
 
@@ -408,62 +408,62 @@ Let's explore the components that make up the Control Plane, how you can view th
 Currently, we only have 1 node and that is the Master Node.
 
 1. To see all available nodes use command:
-```console
+```bash
 kubectl get nodes
 ```
 2. At this point there should be no existing pods in the default namespace. To verify this use command:
-```console
+```bash
 kubectl get pods
 ```
 3. To view ALL pods from ALL namespaces use command:
-```console
+```bash
 kubectl get pods -A
 ```
 4. Let's create a new Pod again:
-```console
+```bash
 kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 5. Verify the Pod was created:
-```console
+```bash
 kubectl get pods
 ```
 6. View again ALL the pods in ALL namespaces:
-```console
+```bash
 kubectl get pods -A
 ```
 
 ## 2.2. SSH Into Nodes
 
 1. View all nodes:
-```console
+```bash
 kubectl get nodes
 ```
 2. To SSH into the available node, use command:
-```console
+```bash
 minikube ssh
 ```
 3. You can then see the directory you landed in using the command:
-```console
+```bash
 pwd
 ```
 4. Or go to root directory
-```console
+```bash
 cd /
 ```
 5. List everything from root
-```console
+```bash
 ls
 ```
 6. See all binaries:
-```console
+```bash
 ls bin
 ```
 7. Check Docker version which was installed in this node:
-```console
+```bash
 docker --version
 ```
 8. View Docker containers running in this node:
-```console
+```bash
 docker ps
 ```
 
@@ -472,27 +472,27 @@ docker ps
 Let's see how we can stop and delete a Kubernetes cluster, as well as creating a cluster with 2 nodes.
 
 1. Make sure the cluster is running:
-```console
+```bash
 minikube status
 ```
 2. To stop a cluster, while keeping all the configuration and settings, use command:
-```console
+```bash
 minikube stop
 ```
 3. Check again to verify the cluster was stopped:
-```console
+```bash
 minikube status
 ```
 4. To start the cluster again, use command:
-```console
+```bash
 minikube start
 ```
 5. Check again if the cluster is successfully running:
-```console
+```bash
 minikube status
 ```
 6. If you want to delete the cluster completely (not only to stop it), use command:
-```console
+```bash
 minikube delete
 ```
 
@@ -501,23 +501,23 @@ minikube delete
 Let's use a Minikube to start a cluster with 2 nodes.
 
 1. To create a cluster with 2 nodes, use command:
-```console
+```bash
 minikube start --nodes=2
 ```
 2. Now verify if there are 2 clusters using the command:
-```console
+```bash
 minikube status
 ```
 3. Verify there are 2 nodes using the command:
-```console
+```bash
 minikube get nodes
 ```
 4. Check the IP address of the Master Node. If we don't specify which node, it will default to the Master Node:
-```console
+```bash
 minikube ip
 ```
 5. If we want to get the IP of a specific node, use command:
-```console
+```bash
 minikube ip --node=minikube-m02
 ```
 
@@ -526,19 +526,19 @@ minikube ip --node=minikube-m02
 Checking logs of nodes can be used to debug them, or just track the node log information.
 
 1. Check logs for the Master Node:
-```console
+```bash
 minikube logs
 ```
 2. Follow the logs in real time as they happen:
-```console
+```bash
 minikube logs -f
 ```
 3. Check all nodes and make sure there is more than one available:
-```console
+```bash
 kubectl get nodes
 ```
 4. Get logs of a specific node:
-```console
+```bash
 minikube logs --node=minikube-m02
 ```
 
@@ -574,7 +574,7 @@ minikube logs --node=minikube-m02
 ## 3.2. Imperative vs Declarative Management
 
 - Pods can be created using an **imperative** command such as:
-```console
+```bash
 kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 - The other approach is to use a declarative configuration.
@@ -619,23 +619,23 @@ Let's explore how to create pods using `kubectl`.
 First we'll create a Pod using **imperative** command, and then we'll declare a Pod using **declarative** configuration.
 
 1. Pods are created in the default namespace if not specified otherwise explicitly. Make sure the `hello-world` Pod doesn't exist:
-```console
+```bash
 kubectl get pods
 ```
 2. Now use the **imperative** command to create the Pod:
-```console
+```bash
 kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
 ```
 3. Check again and verify this newly created Pod is running:
-```console
+```bash
 kubectl get pods
 ```
 4. Connect to this Pod using the command:
-```console
+```bash
 kubectl port-forward pod/hello-world 8080:80
 ```
 5. Verify that you can access:
-```console
+```bash
 http://localhost:8080
 ```
 
@@ -646,23 +646,23 @@ http://localhost:8080
 
 1. Example Pod can be found in this [pod.yml](yamls/pod.yml) file.
 2. Check if there is already a `hello-world` Pod:
-```console
+```bash
 kubectl get pods
 ```
 3. If there is a `hello-world` Pod then delete it:
-```console
+```bash
 kubectl delete pods hello-world
 ```
 4. Now create a Pod from **declarative** configuration file:
-```console
+```bash
 kubectl apply -f pods/pod.yml
 ```
 5. Connect to this Pod:
-```console
+```bash
 kubectl port-forward pod/hello-world 8080:80
 ```
 6. Verify that you can access:
-```console
+```bash
 http://localhost:8080
 ```
 
@@ -704,81 +704,81 @@ Let's learn about the common `kubectl` commands that we're gonna be using within
 ## 4.1. Create and Delete Resources
 
 1. Make sure to delete `hello-world` pod if it's running. To check all pods use command:
-```console
+```bash
 kubectl get pods
 ```
 2. To create a pod based on **declarative** configuration file, use command:
-```console
+```bash
 kubectl apply -f pods/pod.yml
 ```
 3. Another way to create a pod is to take the output (`cat pods/pod.yml`) and feed it into `kubectl apply`:
-```console
+```bash
 cat pods/pod.yml | kubectl apply -f -
 ```
 4. Verify if the pod was created:
-```console
+```bash
 kubectl get pods
 ```
 5. Delete an existing pod:
-```console
+```bash
 kubectl delete pods hello-world
 ```
 6. Verify if the pod was deleted:
-```console
+```bash
 kubectl get pods
 ```
 
 ## 4.2. List resources
 
 1. To list all pods from ALL namespaces:
-```console
+```bash
 kubectl get pods -A
 ```
 2. To list EVERYTHING (not just pods) within the default namespace:
-```console
+```bash
 kubectl get all
 ```
 3. To list EVERYTHING (not just pods) within ALL namespaces:
-```console
+```bash
 kubectl get all -A
 ```
 4. To search pods within a specific namespace:
-```console
+```bash
 kubectl get pods -n kube-system
 ```
 - `-n <namespace>` targets the namespace name.
 5. Find all existing namespaces:
-```console
+```bash
 kubectl get namespaces
 ```
 
 ## 4.3. KUBECTL Describe
 
 1. Verify the `hello-world` pod is running:
-```console
+```bash
 kubectl get pods
 ```
 2. To view all details and information about a specific pod use:
-```console
+```bash
 kubectl describe pods hello-world
 ```
 3. Get a little more information about a specific pod:
-```console
+```bash
 kubectl get pods hello-world -o wide
 ```
 
 ## 4.4. Formatting Output
 
 1. Format logs as table:
-```console
+```bash
 kubectl get pods hello-world -o wide
 ```
 2. Format logs as yaml:
-```console
+```bash
 kubectl get pods hello-world -o yaml
 ```
 3. Format logs as JSON:
-```console
+```bash
 kubectl get pods hello-world -o json
 ```
 
@@ -787,15 +787,15 @@ kubectl get pods hello-world -o json
 Using logs will help to debug pods, applications etc.
 
 1. To print logs of a specific pod:
-```console
+```bash
 kubectl logs hello-world
 ```
 2. Follow logs (if an event happens it will be shown in real time):
-```console
+```bash
 kubectl logs hello-world -f
 ```
 3. If there are multiple containers in a pod, to get logs of a specific container use command: 
-```console
+```bash
 kubectl logs hello-world -c hello-world
 ```
 
@@ -804,20 +804,20 @@ kubectl logs hello-world -c hello-world
 Sometimes you may want to jump into container's shell and debug from within.
 
 1. To enter a pod via terminal in interactive mode (`-it` parameter):
-```console
+```bash
 kubectl exec -it hello-world -- bash
 ```
 2. Or if it requires SH:
-```console
+```bash
 kubectl exec -it hello-world -- sh
 ```
 3. Similarly, if there are multiple containers, to enter into a specific one use the command:
-```console
+```bash
 kubectl exec -it hello-world -c hello-world -- sh
 ```
 - Entering into containers like this is usually used for debugging purposes.
 4. You can also just execute commands from outside without entering into the container. This is called non-interactive mode. For example:
-```console
+```bash
 kubectl exec hello-world -- ls /
 ```
 
@@ -826,31 +826,31 @@ kubectl exec hello-world -- ls /
 Sometimes when you want to debug your application, or just want to verify if things are working, if you want to access the application that runs within your pod, you can do it using `kubectl port-forward`.
 
 1. Connect to a pod:
-```console
+```bash
 kubectl port-forward hello-world 8080:80
 ```
 2. Verify that it works on:
-```console
+```bash
 http://localhost:8080/
 ```
 3. You can change the outer port of the pod, for example:
-```console
+```bash
 kubectl port-forward hello-world 8081:80
 ```
 4. Verify that it works but on port `8081` this time:
-```console
+```bash
 http://localhost:8081/
 ```
 5. The command `kubectl port-forward` works for other resources and not just pods (services and others).
 You can also port forward by explicitly stating that it's a pod:
-```console
+```bash
 kubectl port-forward pod/hello-world 8080:80
 ```
 
 ## 4.8. List All Resource Types
 
 1. To view a list of all resources:
-```console
+```bash
 kubectl api-resources
 ```
 
@@ -859,7 +859,7 @@ kubectl api-resources
 Full cheatsheet can be found on https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 1. See all available commands:
-```console
+```bash
 kubectl --help
 ```
 
@@ -873,7 +873,7 @@ kubectl --help
 - As an example, the file [pod.yml](yamls/pod.yml) is of `kind: Pod`.
 - Don't treat pods like pets, because they are ephemeral (lives for a very short period of time).
 - Pods on its own don't self-heal. For example if you delete a single pod:
-```console
+```bash
 kubectl delete pods hello-world
 ```
 - We just killed the last pod, and it doesn't self-heal. This is dangerous because if you have a real application, you always want at least one more pod replica running.
@@ -909,30 +909,30 @@ kubectl delete pods hello-world
 
 1. We'll use the file [deployment.yml](yamls/deployment.yml) to deploy the pod we currently have.
 2. To deploy it use the command:
-```console
+```bash
 kubectl apply -f pods/deployment.yml
 ```
 3. View the deployed pod and verify that it's running:
-```console
+```bash
 kubectl get pods
 ```
 
 ## 5.4. Managing Deployments
 
 1. To view all deployments:
-```console
+```bash
 kubectl get deployments
 ```
 2. To view all details and information regarding specific deployment:
-```console
+```bash
 kubectl describe deployment hello-world
 ```
 3. To delete a specific deployment:
-```console
+```bash
 kubectl delete deployment hello-world
 ```
 4. Alternatively, you can also target the `.yml` file and delete the deployment that way:
-```console
+```bash
 kubectl delete -f pods/deployment.yml
 ```
 
@@ -960,19 +960,19 @@ kubectl delete -f pods/deployment.yml
 - If you want to delete a ReplicaSet, delete the whole deployment.
 
 1. View all created ReplicaSets:
-```console
+```bash
 kubectl get replicaset
 ```
 2. To view details and information about ReplicaSets:
-```console
+```bash
 kubectl describe replicaset
 ```
 or
-```console
+```bash
 kubectl describe rs
 ```
 3. To view details and information about a specific ReplicaSet:
-```console
+```bash
 kubectl describe rs hello-world-5d9b5cdd77
 ```
 
@@ -982,19 +982,19 @@ kubectl describe rs hello-world-5d9b5cdd77
 - In reality services should be used instead of port-forwarding.
 
 1. Check if `hello-world` pod is running:
-```console
+```bash
 kubectl get pods
 ```
 2. Verify that a single deployment is running a pod:
-```console
+```bash
 kubectl get deployment
 ```
 3. Now let's connect to this deployment:
-```console
+```bash
 kubectl port-forward deployment/hello-world 8080:80
 ```
 4. Verify that it works:
-```console
+```bash
 http://localhost:8080/
 ```
 
@@ -1002,19 +1002,19 @@ http://localhost:8080/
 
 1. In [deployment.yml](yamls/deployment.yml), update config so that `replicas: 3`.
 2. Apply those changes:
-```console
+```bash
 kubectl apply -f pods/deployment.yml
 ```
 3. Check how many pods are running (should be 3 now):
-```console
+```bash
 kubectl get pods
 ```
 4. Verify if there are 3 ReplicaSets:
-```console
+```bash
 kubectl get rs
 ```
 5. Verify the deployment is running 3 pods:
-```console
+```bash
 kubectl get deployment
 ```
 
@@ -1036,11 +1036,11 @@ kubectl get deployment
 ## 6.2. Rolling Updates In Action
 
 1. View all pods and make sure there are 3 replica pods running:
-```console
+```bash
 kubectl get pods
 ```
 2. Port forward this deployment:
-```console
+```bash
 kubectl port-forward deployment/hello-world 8080:80
 ```
 3. Now we'll make v2 of this exact same application.
@@ -1055,15 +1055,15 @@ annotations:
   kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v2"
 ```
 4. Now redeploy:
-```console
+```bash
 kubectl apply -f pods/deployment.yml
 ```
 5. Connect again:
-```console
+```bash
 kubectl port-forward deployment/hello-world 8080:80
 ```
 6. Verify if this time the web page was changed into v2:
-```console
+```bash
 http://localhost:8080/
 ```
 
@@ -1073,27 +1073,27 @@ http://localhost:8080/
 - The reason it works like this is so it can perform rollbacks in case we need it.
 
 1. To see this, view all ReplicaSets:
-```console
+```bash
 kubectl get rs
 ```
 2. View history of rollbacks:
-```console
+```bash
 kubectl rollout history deployment hello-world
 ```
 3. To roll back to a specific deployment, use command:
-```console
+```bash
 kubectl rollout undo deployment hello-world
 ```
 4. Verify if these changes took effect. The highest number under `REVISION` column is our currently active deployment:
-```console
+```bash
 kubectl rollout history deployment hello-world
 ```
 5. Verify on localhost if the older version is now showing:
-```console
+```bash
 http://localhost:8080/
 ```
 6. To review history of deployment for a specific revision:
-```console
+```bash
 kubectl rollout history deployment hello-world --revision=4
 ```
 
@@ -1114,19 +1114,19 @@ image: peopleoid/kubernetes:hello-world-v3
 ...
 ```
 2. Apply these changes:
-```console
+```bash
 kubectl apply -f pods/deployment.yml
 ```
 3. Connect again:
-```console
+```bash
 kubectl port-forward deployment/hello-world 8080:80
 ```
 4. Verify if this time the web page was changed into v3:
-```console
+```bash
 http://localhost:8080/
 ```
 5. Check one more time if v3 is the latest revision active:
-```console
+```bash
 kubectl rollout history deployment hello-world
 ```
 
@@ -1173,23 +1173,23 @@ image: peopleoid/kubernetes:hello-world-v4
 ...
 ```
 4. Apply these changes:
-```console
+```bash
 kubectl apply -f pods/deployment.yml
 ```
 5. Verify if these changes have rolled out:
-```console
+```bash
 kubectl rollout status deployment hello-world
 ```
 6. Verify if there are 5 pods now:
-```console
+```bash
 kubectl get pods
 ```
 7. Connect to this Pod using the command:
-```console
+```bash
 kubectl port-forward deployment/hello-world 8080:80
 ```
 8. Verify if the v4 is running on localhost:
-```console
+```bash
 http://localhost:8080/
 ```
 
@@ -1198,11 +1198,11 @@ http://localhost:8080/
 - Let's say that we are in the middle of a rollout, but now let's say we spotted a bug, so we want to pause that rollout.
 
 1. To pause a rollout use command:
-```console
+```bash
 kubectl rollout pause deployments hello-world 
 ```
 2. After fixing the bug, to resume that rollout use command:
-```console
+```bash
 kubectl rollout resume deployments hello-world 
 ```
 
@@ -1238,45 +1238,45 @@ kubectl rollout resume deployments hello-world
 ## 7.2. Customer Microservice Deployment
 
 1. First, deploy two microservices using Docker by running the automated bash script:
-```console
+```bash
 microservices/deploy.sh
 ```
 2. In [yamls](yamls) directory create a new [customer-deployment.yml](yamls/customer-deployment.yml) file. This customer microservice will be running on port 8080 and will have 2 replicas.
 3. Let's also scale down [deployment.yml](yamls/deployment.yml) from 5 to 2 replicas.
 4. Now apply these changes:
-```console
+```bash
 kubectl apply -f yamls/deployment.yml
 ```
 5. Verify there are 2 `hello-world` pods running:
-```console
+```bash
 kubectl get pods
 ```
 6. Now apply changes for customer microservice:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 7. View pods again and make sure there are 2 pods of customer microservice:
-```console
+```bash
 kubectl get pods
 ```
 8. View logs of an individual customer microservice just to see that it's running on the correct port:
-```console
+```bash
 kubectl logs customer-6cb7ff79b6-2ccmv
 ```
 9. View all the pods, services, deployments and replicas:
-```console
+```bash
 kubectl get all
 ```
 10. View all deployments running right now:
-```console
+```bash
 kubectl get deployments
 ```
 11. Port forward the customer microservice:
-```console
+```bash
 kubectl port-forward deployment/customer 8080:8080
 ```
 12. Confirm that you can access the GET API route from customer microservice:
-```console
+```bash
 http://localhost:8080/api/v1/customers
 ```
 
@@ -1292,19 +1292,19 @@ To do:
 
 1. Create [order-deployment.yml](yamls/order-deployment.yml) file as a Kubernetes deployment.
 2. Apply those changes:
-```console
+```bash
 kubectl apply -f yamls/order-deployment.yml
 ```
 3. Confirm that you have 2 replica pods of order microservice:
-```console
+```bash
 kubectl get pods
 ```
 4. Connect with port forward:
-```console
+```bash
 kubectl port-forward deployment/order 8080:8081
 ```
 5. Check the URL (it should return an empty list because currently `order` microservice is not talking to the `customer` microservice):
-```console
+```bash
 http://localhost:8080/api/v1/orders/customers/1
 ```
 
@@ -1314,11 +1314,11 @@ http://localhost:8080/api/v1/orders/customers/1
 - This is a BAD approach and in real development should not be done this way.
 
 1. Show all pods:
-```console
+```bash
 kubectl get pods
 ```
 2. View details of a specific pod, lets say an order microservice:
-```console
+```bash
 kubectl describe pods order-778c484f7c-46h2w
 ```
 3. Grab its IP address and add it to [customer-deployment.yml](yamls/customer-deployment.yml) file for the container `customer`:
@@ -1328,27 +1328,27 @@ env:
     value: "10.244.0.39:8081"
 ```
 4. Apply these changes:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 5. Port forward the customer microservice:
-```console
+```bash
 kubectl port-forward deployment/customer 8080:8080
 ```
 6. Check if it works:
-```console
+```bash
 http://localhost:8080/api/v1/customers/1/orders
 ```
 7. Here's the problem with this approach. Let's delete the order microservice:
-```console
+```bash
 kubectl delete -f yamls/order-deployment.yml
 ```
 8. Now let's create the order microservice again:
-```console
+```bash
 kubectl apply -f yamls/order-deployment.yml
 ```
 9. Try to access the same localhost url. It should not work anymore because there's a new pod IP address assigned to the order microservice:
-```console
+```bash
 http://localhost:8080/api/v1/customers/1/orders
 ```
 
@@ -1387,7 +1387,7 @@ spec:
   type: ClusterIP
 ```
 2. Apply these changes:
-```console
+```bash
 kubectl apply -f yamls/order-deployment.yml
 ```
 
@@ -1397,41 +1397,41 @@ kubectl apply -f yamls/order-deployment.yml
 - But first we have to set the customer microservice to point to the service we created, instead using individual pod IP addresses.
 
 1. View all available services (should be `kubernetes` and `order`):
-```console
+```bash
 kubectl get services
 ```
 2. Get details and information about `order` microservice:
-```console
+```bash
 kubectl describe service order
 ```
 - The `Endpoints` describe IP + Port of healthy pods.
 3. To verify if this is true, get all pods:
-```console
+```bash
 kubectl get pods
 ```
 4. Grab and describe a specific `order` pod. Verify if its IP + Port matches one of the service `Endpoints` IP + Ports:
-```console
+```bash
 kubectl describe pods order-778c484f7c-qg6c6
 ```
 5. Update [order-deployment.yml](yamls/order-deployment.yml) file so that it has 3 replicas instead of 2.
 6. Apply those changes:
-```console
+```bash
 kubectl apply -f yamls/order-deployment.yml
 ```
 7. Describe `order` microservice once again to verify the `Endpoints` now has 3 IP addresses (3 pods):
-```console
+```bash
 kubectl describe service order
 ```
 8. Update [order-deployment.yml](yamls/order-deployment.yml) back to 2 replicas.
 9. You can also directly view all the available endpoints:
-```console
+```bash
 kubectl get endpoints
 ```
 
 ## 7.8. ClusterIP Service In Action
 
 1. Describe the `order` microservice:
-```console
+```bash
 kubectl describe service order
 ```
 2. Take the IP address and plug it in [customer-deployment.yml](yamls/customer-deployment.yml) file:
@@ -1441,28 +1441,28 @@ env:
     value: "10.109.216.231:8081"
 ```
 3. Apply these changes:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 4. View all services:
-```console
+```bash
 kubectl get services
 ```
 - There should be `kubernetes` and `order` services, both having only ClusterIP and none for ExternalIP.
 5. To check which services can be deployed, run command:
-```console
+```bash
 kubectl get deploy
 ```
 6. Now port-forward the customer microservice:
-```console
+```bash
 kubectl port-forward deployment/customer 8080:8080
 ```
 7. Test on localhost. Before we had a connection timeout, but now we're using the service:
-```console
+```bash
 http://localhost:8080/api/v1/customers/1/orders
 ```
 - This should return 1 record.
-```console
+```bash
 http://localhost:8080/api/v1/customers/3/orders
 ```
 - This should return an empty list because there are no orders with ID=3.
@@ -1473,15 +1473,15 @@ env:
     value: "order:8081"
 ```
 9. Apply these changes:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 10. Port-forward the customer microservice once again:
-```console
+```bash
 kubectl port-forward deployment/customer 8080:8080
 ```
 11. Test on localhost and make sure everything still works like before:
-```console
+```bash
 http://localhost:8080/api/v1/customers/1/orders
 ```
 12. To eliminate the port as well, just set to `"order"` in [customer-deployment.yml](yamls/customer-deployment.yml) file:
@@ -1497,19 +1497,19 @@ ports:
     targetPort: 8081
 ```
 14. Apply these changes for customer:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 15. Now apply changes for order:
-```console
+```bash
 kubectl apply -f yamls/order-deployment.yml
 ```
 16. Port-forward customer again:
-```console
+```bash
 kubectl port-forward deployment/customer 8080:8080
 ```
 17. Test on localhost and make sure everything still works like before:
-```console
+```bash
 http://localhost:8080/api/v1/customers/1/orders
 ```
 
@@ -1561,14 +1561,72 @@ spec:
   type: NodePort
 ```
 2. Apply these changes:
-```console
+```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
 3. Now check if this service was created:
-```console
+```bash
 kubectl get services
 ```
 4. View `customer-node` service details:
-```console
+```bash
 kubectl describe service customer-node
 ```
+
+## 7.11. Accessing API With NodePort Service
+
+1. Use the standard Docker command to check processes running:
+```bash
+docker ps
+```
+- There should be `minikube` and `minikube-m02` running.
+2. The same thing should display when you run:
+```bash
+kubectl get nodes
+```
+3. View IP for default (`minikube`) node:
+```bash
+minikube ip
+```
+4. View IP for the second (`minikube-m02`) node:
+```bash
+minikube ip -n minikube-m02
+```
+5. SSH into default minikube:
+```bash
+minikube ssh
+```
+6. Now let's send a request from the default node to the second node as `ssh`:
+```bash
+curl localhost:30000/api/v1/customers
+```
+7. Try to curl the same API route but with the other node instead of localhost:
+```bash
+curl 192.168.49.3:30000/api/v1/customers
+```
+- If both can curl, it means these nodes can talk to each other.
+8. Now ssh into the other node:
+```bash
+minikube ssh -n minikube-m02
+```
+9. Try curling the same API route:
+```bash
+curl localhost:30000/api/v1/customers
+```
+10. Now curl but targeting the other node:
+```bash
+curl 192.168.49.2:30000/api/v1/customers
+```
+11. Again, check all existing services:
+```bash
+kubectl get services
+```
+12. To get the service to generate its url, use command:
+```bash
+minikube service customer-node
+```
+13. Open the URL it generated and confirm if the API works:
+```bash
+http://127.0.0.1:60815/api/v1/customers
+```
+- That's it! This is how you access your application using Node Ports.
