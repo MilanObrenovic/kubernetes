@@ -1541,3 +1541,34 @@ http://localhost:8080/api/v1/customers/1/orders
 
 - There can only be 1 service per port.
 - If Node IP address changes, then we have a problem.
+
+## 7.10. Creating NodePort Service
+
+1. In [customer-deployment.yml](yamls/customer-deployment.yml) add a service:
+```yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-node
+spec:
+  selector:
+    app: customer
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30000
+  type: NodePort
+```
+2. Apply these changes:
+```console
+kubectl apply -f yamls/customer-deployment.yml
+```
+3. Now check if this service was created:
+```console
+kubectl get services
+```
+4. View `customer-node` service details:
+```console
+kubectl describe service customer-node
+```
