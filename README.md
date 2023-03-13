@@ -1723,3 +1723,26 @@ kubectl apply -f yamls/customer-deployment.yml
 ```bash
 kubectl get svc
 ```
+
+## 7.14. LoadBalancer Service
+
+### 7.14.1. LoadBalancer
+
+![img.png](misc/load-balancer.png)
+
+- Standard way of exposing applications to the Internet.
+- Creates a load balancer **per service**.
+  - This means if you want to expose more than 1 service to the Internet, then you're actually creating a separate load balancer.
+- When we create a service of type LoadBalancer, depending on the cloud provider that we're running on (AWS/GCP/Azure), it creates a **Network Load Balancer (NLB)**.
+
+### 7.14.2. What Is A Network Load Balancer?
+
+Documentation:
+- AWS: https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html
+- GCP: https://cloud.google.com/load-balancing/docs/network
+- Azure: https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-overview
+- Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, IP addresses, in one or more Availability Zones.
+- Never let the users talk to VMs directly.
+- If you have 10 VMs, it should go through the load balancer which distributes the traffic between those VMs.
+- Because we are running Kubernetes locally and not yet running on the cloud, we can run the command `minikube tunnel`.
+- In Kubernetes architecture, there is a Cloud Controller Manager, which is responsible for talking to the underlying cloud provider.
