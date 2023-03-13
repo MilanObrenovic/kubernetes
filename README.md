@@ -1351,3 +1351,42 @@ kubectl apply -f yamls/order-deployment.yml
 ```console
 http://localhost:8080/api/v1/customers/1/orders
 ```
+
+## 7.6. ClusterIP Service
+
+### 7.6.1. ClusterIP
+
+![img.png](misc/clusterip.png)
+
+- Default Kubernetes service.
+- When you create a service, and you don't specify the type, the default is ClusterIP.
+- ClusterIP type is used only for internal access – no external.
+- Let's say there's a scenario within a cluster, you have a pod, and let's say in this case we want customer microservice to talk to order microservice.
+  - If the customer microservice wants to talk to order microservice internally, we use ClusterIP type service.
+  - This service will send traffic to any pod which is healthy.
+- Services will only send traffic to healthy pods.
+- Customer microservice can then perform a request to the service, and not the pod IP address.
+
+1. To create a service in the same `.yml` file, just add 3 dashes and add this is [order-deployment.yml](yamls/order-deployment.yml) file:
+```yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+spec:
+  # This will tell the service to send traffic to any pod that
+  # has a specific set of labels with app name `order`.
+  selector:
+    app: order
+  ports:
+    - port: 8081
+      targetPort: 8081
+  # This can be omitted, because it's set by default.
+  # ClusterIP is used only for internal communication.
+  type: ClusterIP
+```
+2. Apply these changes:
+```console
+kubectl apply -f yamls/order-deployment.yml
+```

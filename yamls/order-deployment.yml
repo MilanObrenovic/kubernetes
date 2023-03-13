@@ -26,3 +26,19 @@ spec:
   selector:
     matchLabels:
       app: order
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+spec:
+  # This will tell the service to send traffic to any pod that
+  # has a specific set of labels with app name `order`.
+  selector:
+    app: order
+  ports:
+    - port: 8081
+      targetPort: 8081
+  # This can be omitted, because it's set by default.
+  # ClusterIP is used only for internal communication.
+  type: ClusterIP
