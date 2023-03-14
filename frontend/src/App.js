@@ -2,6 +2,7 @@ import './App.css';
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {Button, List} from "antd";
+import "antd/dist/antd.css";
 
 const url = "/api/v1/customers";
 
@@ -88,8 +89,12 @@ function App() {
 
   return (
     <div>
-      {customers.length < 1 ? "No data." : renderCustomers()}
-      {orders && orders.length < 1 ? "No customer selected." : renderOrders()}
+      <div>
+        {customers.length < 1 ? "No data." : renderCustomers()}
+      </div>
+      <div>
+        {orders && orders.length < 1 ? "No customer selected." : renderOrders()}
+      </div>
     </div>
   );
 }

@@ -1761,3 +1761,53 @@ Goal:
 4. The frontend gets some data from the customer microservice through a new ClusterIP service.
 5. Then that is forwarded to the pod `peopleoid/kubernetes:customer-v1` (port `8080`).
 6. Customer talks to order using ClusterIP service, which forwards it to pods `peopleoid/kubernetes:order-v1` (port `8081`).
+
+## 7.16. Full Stack App Exposed With LoadBalancer Service
+
+1. Add `frontend` service in [frontend.yml](yamls/frontend.yml) file of type `LoadBalancer`.
+2. Add `customer` service in [customer-deployment.yml](yamls/customer-deployment.yml) file of type `ClusterIP`.
+3. Apply these changes for `customer` microservice:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+4. Check if this service was created:
+```bash
+kubectl get svc
+```
+5. Now apply the changes for the `frontend`:
+```bash
+kubectl apply -f yamls/frontend.yml
+```
+6. Check if a frontend pod was created:
+```bash
+kubectl get pods
+```
+- There should be 1 instance of frontend running.
+7. Let's change this to 2 replicas for the frontend by updating replicas to `2` in [frontend.yml](yamls/frontend.yml).
+8. Apply those changes again:
+```bash
+kubectl apply -f yamls/frontend.yml
+```
+9. View pods again, verify if there are 2 frontend pods this time:
+```bash
+kubectl get pods
+```
+10. View all services now:
+```bash
+kubectl get svc
+```
+- The ExternalIP of `frontend` should be set to pending.
+11. In a new terminal window, use a watcher command to get real-time changes of all services:
+```bash
+kubectl get svc -w
+```
+12. Now in the first terminal window use command:
+```bash
+minikube tunnel
+```
+- Now preview the second terminal window.
+- An ExternalIP address should now be assigned.
+13. Test if this is working using the ExternalIP:
+```bash
+http://127.0.0.1/
+```
