@@ -4,6 +4,9 @@ metadata:
   name: hello-world
   labels:
     app: hello-world
+    environment: dev
+    tier: backend
+    department: engineering
 spec:
   containers:
     - name: hello-world

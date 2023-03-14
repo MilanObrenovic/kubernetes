@@ -11,6 +11,9 @@ spec:
       name: order
       labels:
         app: order
+        environment: test
+        tier: backend
+        department: engineering
     spec:
       containers:
         - name: order

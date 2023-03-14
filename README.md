@@ -1907,3 +1907,28 @@ kubectl apply -f yamls/customer-deployment.yml
 ```bash
 kubectl get pods --show-labels
 ```
+
+## 8.2. Selectors
+
+1. First off let's update all of the `.yml` files in `yamls` directory with more labels.
+2. Then to apply these changes to all the yamls in the same time just execute the apply command under the entire directory:
+```bash
+kubectl apply -f yamls/
+```
+3. View all pods with labels:
+```bash
+kubectl get pods --show-labels
+```
+4. Selectors are used to filter Kubernetes objects based on a set of labels.
+5. Let's filter pods by tier label:
+```bash
+kubectl get pods --selector="tier=frontend"
+```
+6. You can also combine multiple labels in a single selector:
+```bash
+kubectl get pods --selector="tier=backend,environment=test"
+```
+7. Alternative way of filtering would be like:
+```bash
+kubectl get pods -l tier=backend,environment=test
+```

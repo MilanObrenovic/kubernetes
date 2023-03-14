@@ -11,6 +11,9 @@ spec:
       name: frontend
       labels:
         app: frontend
+        environment: test
+        tier: frontend
+        department: engineering
     spec:
       containers:
         - name: frontend
