@@ -3,10 +3,12 @@
 - First make sure to install example Docker images located in [docker-images](docker-images) directory.
 - You can do it via standard Docker commands, or just run the devops file `update.sh` located in each subdirectory by running the command:
 ```bash
-docker-images/hello-world/update.sh
-docker-images/hello-world-v2/update.sh
-docker-images/hello-world-v3/update.sh
-docker-images/hello-world-v4/update.sh
+docker-images/hello-world/deploy.sh
+docker-images/hello-world-v2/deploy.sh
+docker-images/hello-world-v3/deploy.sh
+docker-images/hello-world-v4/deploy.sh
+microservices/deploy.sh
+frontend/deploy.sh
 ```
 - These two images will be used as examples for this Kubernetes learning documentation.
 
@@ -1746,3 +1748,16 @@ Documentation:
 - If you have 10 VMs, it should go through the load balancer which distributes the traffic between those VMs.
 - Because we are running Kubernetes locally and not yet running on the cloud, we can run the command `minikube tunnel`.
 - In Kubernetes architecture, there is a Cloud Controller Manager, which is responsible for talking to the underlying cloud provider.
+
+## 7.15. Exercise
+
+![img.png](misc/exercise.png)
+
+Goal:
+
+1. Have a client hit the load balancer that will run with `minikube tunnel`.
+2. Forward that to the LoadBalancer service type.
+3. The LoadBalancer service type forwards to pod `peopleoid/kubernetes:frontend-v1`, which listens on port `80`.
+4. The frontend gets some data from the customer microservice through a new ClusterIP service.
+5. Then that is forwarded to the pod `peopleoid/kubernetes:customer-v1` (port `8080`).
+6. Customer talks to order using ClusterIP service, which forwards it to pods `peopleoid/kubernetes:order-v1` (port `8081`).
