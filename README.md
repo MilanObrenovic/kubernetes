@@ -1811,3 +1811,27 @@ minikube tunnel
 ```bash
 http://127.0.0.1/
 ```
+- **Side note:** if you want to upload a new version of frontend, make sure to delete the deployment version of frontend that was created by Kubernetes, and then recreate it.
+
+## 7.17. Default Kubernetes Service
+
+1. List all services:
+```bash
+kubectl get services
+```
+- Here you can see the ClusterIP address of `kubernetes` service.
+2. List all endpoints:
+```bash
+kubectl get endpoints
+```
+- Here we can also see the `kubernetes` endpoint IP + Port address.
+3. List all pods in ALL namespaces:
+```bash
+kubectl get pods -A
+```
+- Here we have `kube-apiserver-minikube` under `kube-system` namespace.
+4. Describe this pod:
+```bash
+kubectl describe pods kube-apiserver-minikube -n kube-system
+```
+- Here we can see the IP address `192.168.49.2`, and `--secure-port=8443`, which should be the same IP + Port address of the `kubernetes` endpoint.
