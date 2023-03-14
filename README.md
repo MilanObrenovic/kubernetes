@@ -1835,3 +1835,75 @@ kubectl get pods -A
 kubectl describe pods kube-apiserver-minikube -n kube-system
 ```
 - Here we can see the IP address `192.168.49.2`, and `--secure-port=8443`, which should be the same IP + Port address of the `kubernetes` endpoint.
+
+# 8. Labels, Selectors And Annotations
+
+- In this section we'll take a look at labels, selectors and annotations in Kubernetes.
+
+## 8.1. Labels
+
+1. Let's analyze the [customer-deployment.yml](yamls/customer-deployment.yml) file as an example. 
+2. Here we have this part:
+```yml
+...
+template:
+  metadata:
+    name: customer
+    labels:
+      app: customer
+...
+```
+3. Labels are a key-value pair that we can attach to object, such:
+  - Pods
+  - Services
+  - Replica Sets
+  - Other Kubernetes objects
+- They're used to organize and select objects by labels.
+- The above code is naming the pod as `customer`.
+4. Let's look at this example:
+```yml
+selector:
+  matchLabels:
+    app: customer
+```
+- This selector means that the `ReplicaSet` will manage anything with that given label app name.
+5. To view these labels applied, run command:
+```bash
+kubectl get pods --show-labels
+```
+6. We can take this further and add more labels, such as:
+  - `environment`
+    - test
+    - qa
+    - development
+    - staging
+    - production
+    - ...
+  - `tier`
+    - backend
+    - frontend
+    - ...
+  - `department`
+    - engineering
+    - marketing
+    - sales
+    - ...
+  - ...
+7. As an example:
+```yml
+template:
+  metadata:
+    name: customer
+    labels:
+      app: customer
+      environment: test
+      tier: backend
+```
+8. Apply these changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+9. To view these new labels, use command:
+```bash
+kubectl get pods --show-labels
+```

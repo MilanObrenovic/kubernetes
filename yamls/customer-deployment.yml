@@ -11,6 +11,9 @@ spec:
       name: customer
       labels:
         app: customer
+        environment: test
+        tier: backend
+        department: engineering
     spec:
       containers:
         - name: customer
