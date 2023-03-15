@@ -1984,3 +1984,24 @@ http://127.0.0.1:58707/
 ```
 - It should display a `blue` pod.
 12. To display the `green` pod, modify the [pod.yml](yamls/pod.yml) so that `name: green`, apply changes and run the service again.
+
+## 8.4 Querying With `In` And `NotIn`
+
+- It's possible to query the labels using specific keywords.
+
+1. To target all `environment` labels with specific values `dev` and `test` (`OR` operation):
+```bash
+kubectl get pods -l "environment in (dev, test)"
+```
+2. Query multiple labels with multiple values:
+```bash
+kubectl get pods -l "environment in (dev, test), tier in (frontend)"
+```
+3. It's also possible to query in reverse using `notin` keyword:
+```bash
+kubectl get pods -l "environment in (dev, test), tier notin (frontend)"
+```
+4. Another example of `notin`:
+```bash
+kubectl get pods -l "environment notin (test)"
+```
