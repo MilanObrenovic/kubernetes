@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emptydir-volume
+  labels:
+    app: emptydir-volume
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: emptydir-volume
+      labels:
+        app: emptydir-volume
+    spec:
+      volumes:
+          # mimic caching memory type
+        - name: cache
+          # temporary directory that shares the pod lifetime
+          emptyDir: {}
+      containers:
+        - name: one
+          # busybox is an image used for testing purposes
+          image: busybox
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "touch /foo/bar.txt && sleep 3600"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+              # location where we want to mount this volume
+            - mountPath: /foo
+              # this must match the name of the volume
+              name: cache
+          imagePullPolicy: Always
+        - name: two
+          # busybox is an image used for testing purposes
+          image: busybox
+          command:
+            - "sleep"
+            - "3600"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            # location where we want to mount this volume
+            - mountPath: /foo
+              # this must match the name of the volume
+              name: cache
+          imagePullPolicy: Always
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: emptydir-volume

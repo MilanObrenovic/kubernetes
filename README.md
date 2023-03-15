@@ -2219,3 +2219,68 @@ To recap:
   - Init Container
   - Sidecar Containers
   - **Volumes**
+
+## 10.2. EmptyDir Volume Part 1
+
+### 10.2.1. Volume: EmptyDir
+
+- EmptyDir means that the volume is initially empty.
+- Temporary directory that shares a pod's lifetime.
+- If a pod dies, you lose contents of this temporary directory.
+- Used for sharing data between containers inside a pod.
+
+1. Create [empty-dir-volume.yml](yamls/empty-dir-volume.yml) file with 2 containers that are gonna share volume with each other.
+2. To create volume, put this inside of `spec`:
+```yml
+volumes:
+    # mimic caching memory type
+  - name: cache
+    # temporary directory that shares the pod lifetime
+    emptyDir: {}
+```
+- Now that we have a temporary directory, we can now use it inside of these two containers.
+3. To use the temporary directory, put this inside both of the `containers`:
+```yml
+volumeMounts:
+    # location where we want to mount this volume
+  - mountPath: /foo
+    # this must match the name of the volume
+    name: cache
+```
+4. Apply these changes:
+```bash
+kubectl apply -f yamls/empty-dir-volume.yml
+```
+5. View all pods:
+```bash
+kubectl get pods
+```
+- It should return that the `emptydir-volume` pod has a `CrashLoopBackOff` status.
+6. View logs of each container:
+```bash
+kubectl logs emptydir-volume-545957df75-9zxx6 -c one
+kubectl logs emptydir-volume-545957df75-9zxx6 -c two
+```
+- It should return nothing – there are no logs.
+- The reason why this is happening is that the `busybox` image just comes up and dies immediately.
+- There isn't a process which is running and making it to be alive.
+7. To fix this, we need to insert a command inside of `containers`:
+```yml
+command:
+  - "/bin/sh"
+```
+- This command will navigate to the `/bin/sh` directory within the container.
+8. But we also need to pass the arguments:
+```yml
+args:
+  - "-c"
+  - "touch /foo/bar.txt && sleep 3600"
+```
+- Here we are storing the file `bar.txt` inside the mount path (`foo`) we defined.
+- After creating this file, the program will wait for 3600 seconds.
+9. Alternate way of defining sleep without arguments:
+```yml
+command:
+  - "sleep"
+  - "3600"
+```
