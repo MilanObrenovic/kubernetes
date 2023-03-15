@@ -2165,3 +2165,32 @@ kubectl delete pods green -n kube-system
 kubectl get ep
 ```
 - The number of IP + Port addresses for each endpoint indicates how many pods (replicas) the service has.
+
+## 9.5. Kube-Proxy
+
+### 9.5.1. KubeProxy
+
+![img.png](misc/kubeproxy.png)
+
+- The last piece of puzzle when it comes to **Service Discovery** is **Kube Proxy**.
+- In earlier sections regarding Kubernetes architecture, each node has 3 components:
+  - Kubelet
+  - Container Runtime
+  - Kube Proxy
+- KubeProxy is a network proxy that runs on each node, implementing part of the Kubernetes service.
+- Maintains network rules to allow communication to pods from inside and outside the cluster.
+- Implements a controller that watches the API server for new **Services** and **Endpoints**.
+- When there is a new service and endpoint, the KubeProxy creates local **IPVS** rules that tell nodes to intercept traffic destined to the service **ClusterIP**.
+- **IPVS** (IP Virtual Server) is built on top of the net filter, and implements a transport layer load balancing as part of the Linux kernel.
+  - Basically what it gives us is the ability of load balancing to real service.
+- Redirects traffic to **Pods** that match **Service Label Selectors**.
+
+1. List all pods in `kube-system` namespace:
+```bash
+kubectl get pods -n kube-system
+```
+- There should be `kube-proxy` pods.
+2. View logs of a specific pod:
+```bash
+kubectl logs kube-proxy-2s8d5 -n kube-system 
+```
