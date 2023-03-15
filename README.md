@@ -2005,3 +2005,10 @@ kubectl get pods -l "environment in (dev, test), tier notin (frontend)"
 ```bash
 kubectl get pods -l "environment notin (test)"
 ```
+
+## 8.5. Annotations
+
+- Annotation is an unstructured key-value map stored in a resource that may be set by external tools to store and retrieve any metadata.
+- They are **not queryable** and should be preserved when modifying objects.
+- The sole purpose annotations is to assist tools and libraries to work with your Kubernetes objects.
+- For example: you might use it to pass configuration around between systems.
