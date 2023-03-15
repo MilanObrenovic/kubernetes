@@ -2108,3 +2108,44 @@ apt-get install dnsutils
 curl http://customer.default.svc.cluster.local/api/v1/customers
 ```
 - `default` means that it's targeting the default namespace.
+
+## 9.3. Accessing Services From Different Namespaces
+
+1. List all available namespaces:
+```bash
+kubectl get ns
+```
+- There should be a `default` namespace along with 3 others.
+2. If you list all the pods:
+```bash
+kubectl get pods
+```
+- This will list all the pods in the `default` namespace.
+3. List all pods but from a different namespace, `kube-system` for example:
+```bash
+kubectl get pods -n kube-system
+```
+4. In [pod.yml](yamls/pod.yml), we have duplicated the `green` pod as an example, and added namespace to `kube-system`. Now if we list all pods within `kube-system`:
+```bash
+kubectl get pods -n kube-system
+```
+- The `green` pod should be listed there.
+5. Execute into pod `green` as interactive mode:
+```bash
+kubectl exec -it green -n kube-system -- sh
+```
+9. To access the `customer` pod but within the default namespace:
+```bash
+nslookup customer.default.svc.cluster.local
+```
+- Take note of the IP address it printed (`10.97.82.250`).
+10. Exit out of the shell pod and get all services:
+```bash
+kubectl get svc
+```
+- Notice how the `customer` ClusterIP address is the same as the one we got with `dnslookup` command.
+11. Delete the `green` pod from `kube-system` namespace:
+```bash
+kubectl delete pods green -n kube-system
+```
+12. Also make sure to delete the duplicated `green` pod in [pod.yml](yamls/pod.yml) that was created for this `kube-system` namespace.
