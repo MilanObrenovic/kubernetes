@@ -2194,3 +2194,28 @@ kubectl get pods -n kube-system
 ```bash
 kubectl logs kube-proxy-2s8d5 -n kube-system 
 ```
+
+# 10. Volumes & Storage
+
+## 10.1. Intro To Volumes
+
+### 10.1.1. Storage And Volumes
+
+To recap:
+- **Pods** are ephemeral - they come and go.
+- Any data associated is deleted when pod or container dies or restarts.
+- There are times when we want to persist (keep) data to disk.
+- Or perhaps we want to share data between pods.
+- Majority of the times, we want to write stateless applications, you don't want to keep data on the actual node because running Kubernetes on the cloud means nodes can come and go.
+- There are times when we want to have access to the host file system, store and keep the data if the pod dies etc.
+
+### 10.1.2. Pods
+
+![img.png](misc/pods.png)
+
+- As a reminder, this is a definition of a pod.
+- A Pod is a collection of 1 or more containers, which can consist of:
+  - Main Container
+  - Init Container
+  - Sidecar Containers
+  - **Volumes**
