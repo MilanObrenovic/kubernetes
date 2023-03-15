@@ -2032,3 +2032,79 @@ kubectl get pods -l "environment notin (test)"
 - We access information online through domain names, like nytimes.com, espn.com etc.
 - Web browsers interact through Internet Protocol (IP) addresses.
 - DNS translates domain names to IP addresses so browsers can load Internet resources.
+
+## 9.2. CoreDNS & DNS Resolution
+
+### 9.2.1. Service Registration
+
+![img.png](misc/service-registration.png)
+
+- When we create a service, we basically register each service to our **Service Registry**.
+- Most clusters call this **CoreDNS**.
+- Any time we create a service, CoreDNS registers the service name along with its IP address in the **Service Registry**.
+- On the other side, this is where for example the consumer (such as pod or application) can consume whatever data or API that the service exposes.
+
+### 9.2.2. What is a CoreDNS?
+
+- Full documentation:
+  - https://coredns.io/manual/toc/
+- CoreDNS is a DNS server written in Golang.
+- It can be used in a multitude of environments because of its flexibility.
+
+1. Get all pods within namespace `kube-system`:
+```bash
+kubectl get pods -n kube-system
+```
+- There should be a `coredns` pod listed.
+2. Get all services within namespace `kube-system`:
+```bash
+kubectl get services -n kube-system
+```
+- There should be `kube-dns` service listed.
+3. View information about service `kube-dns` within `kube-system` namespace:
+```bash
+kubectl describe service kube-dns -n kube-system
+```
+- This service should have only 1 endpoint which is the pod we've seen before.
+4. list all services again within namespace `kube-system`:
+```bash
+kubectl get services -n kube-system
+```
+- Take note of the IP address of `kube-dns` service (`10.96.0.10`).
+5. Execute into pod `blue` as interactive mode:
+```bash
+kubectl exec -it blue -- sh
+```
+6. List all files and directories within `etc` folder:
+```bash
+ls /etc/
+```
+- There should be a file `resolv.conf`.
+7. Read contents of `resolv.conf` file:
+```bash
+cat /etc/resolv.conf
+```
+- There should be a nameserver IP address exactly the same as `kube-dns` IP address.
+- This file (`resolv.conf`) is present in every single pod.
+- `resolv.conf` is the name of a computer file used in various operating systems to configure the system's Domain Name System (DNS) resolver.
+8. Still inside the shell of `blue` pod, try to fetch the customers through the API:
+```bash
+curl http://customer/api/v1/customers
+```
+9. Now view DNS information regarding `customer` pod:
+```bash
+nslookup customer
+```
+- In case the `nslookup` command is not found, run:
+```bash
+apt-get update
+apt-get install dnsutils
+```
+- In here we can see the server IP address that it's using.
+- `nslookup` is a network administration command line for querying the DNS to obtain the mapping of a domain name and its IP address.
+- One of the information logs it printed should be the `Name` key with value `customer.default.svc.cluster.local`.
+10. We can use that same `Name` as the API base url:
+```bash
+curl http://customer.default.svc.cluster.local/api/v1/customers
+```
+- `default` means that it's targeting the default namespace.
