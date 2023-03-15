@@ -2149,3 +2149,19 @@ kubectl get svc
 kubectl delete pods green -n kube-system
 ```
 12. Also make sure to delete the duplicated `green` pod in [pod.yml](yamls/pod.yml) that was created for this `kube-system` namespace.
+
+## 9.4. Endpoints
+
+### 9.4.1. Endpoint
+
+![img.png](misc/endpoint.png)
+
+- With a service, you get an associated endpoint.
+- Endpoint contains a list of IP addresses to pods which have matched a particular selector, and also which are healthy.
+- Because if a pod is not healthy, then there is no point for the service to load balance between traffic to load those pods.
+
+1. To view endpoints, use command:
+```bash
+kubectl get ep
+```
+- The number of IP + Port addresses for each endpoint indicates how many pods (replicas) the service has.
