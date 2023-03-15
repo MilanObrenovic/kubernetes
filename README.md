@@ -7,12 +7,16 @@ docker-images/hello-world/deploy.sh
 docker-images/hello-world-v2/deploy.sh
 docker-images/hello-world-v3/deploy.sh
 docker-images/hello-world-v4/deploy.sh
+docker-images/blue/deploy.sh
+docker-images/green/deploy.sh
 microservices/deploy.sh
 frontend/deploy.sh
 ```
 - These two images will be used as examples for this Kubernetes learning documentation.
 
 # 1. Getting Started
+
+![img.png](misc/k8s.png)
 
 The goal here is to master Kubernetes from A to Z.
 
@@ -1932,3 +1936,51 @@ kubectl get pods --selector="tier=backend,environment=test"
 ```bash
 kubectl get pods -l tier=backend,environment=test
 ```
+
+## 8.3. Labels And Selectors With Objects
+
+- Let's see how all of these fit together and how it's used in the Kubernetes world.
+
+1. First off in [pod.yml](yamls/pod.yml), add:
+   1. A pod with image `peopleoid/kubernetes:blue`, listening on port `80`.
+   2. A pod with image `peopleoid/kubernetes:green`, listening on port `80`.
+   3. A service with selector name `blue`, port `80` and target port `80`. This service should be of type ClusterIP.
+2. Apply these changes:
+```bash
+kubectl apply -f yamls/pod.yml
+```
+3. View these new pods:
+```bash
+kubectl get pods
+```
+4. View the newly created service:
+```bash
+kubectl get svc
+```
+5. View details about `labels-and-selector` service:
+```bash
+kubectl describe svc labels-and-selector
+```
+- There should be 2 `Endpoints` with IP + Port addresses, one is the `blue` and the other is a `green` pod.
+6. In [pod.yml](yamls/pod.yml), add `environment: test` to `labels-and-selector` service.
+7. Apply those changes:
+```bash
+kubectl apply -f yamls/pod.yml
+```
+8. Describe the service again:
+```bash
+kubectl describe svc labels-and-selector
+```
+- Now there shouldn't be any endpoints.
+- Because the selector must select ALL or NOTHING (there is no pod with BOTH `name: blue` AND `environment: test`).
+9. Add `environment: test` to both `blue` and `green` pods, and then describe the service again – this time it should have 2 endpoints again because the selector matches with BOTH labels.
+10. Start the service:
+```bash
+kubectl service labels-and-selector
+```
+11. Open the generated localhost url and test if it works:
+```bash
+http://127.0.0.1:58707/
+```
+- It should display a `blue` pod.
+12. To display the `green` pod, modify the [pod.yml](yamls/pod.yml) so that `name: green`, apply changes and run the service again.
