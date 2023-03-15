@@ -2012,3 +2012,23 @@ kubectl get pods -l "environment notin (test)"
 - They are **not queryable** and should be preserved when modifying objects.
 - The sole purpose annotations is to assist tools and libraries to work with your Kubernetes objects.
 - For example: you might use it to pass configuration around between systems.
+
+# 9. Service Discovery
+
+## 9.1. Service Discovery And DNS
+
+### 9.1.1. Service Discovery
+
+- Mechanism for applications and microservices to locate each other on a network.
+- Service discovery happens through services.
+- Again, we shouldn't rely on pods because they are ephemeral (short-lived), and their IP addresses change often.
+- Instead, we should rely on services because a service has a stable IP address, and also it has a DNS.
+
+### 9.1.2. What is DNS?
+
+- Full documentation:
+  - https://cloudflare.com/learning/dns/what-is-dns/
+- In short, Domain Name System (DNS) is a phonebook of the Internet.
+- We access information online through domain names, like nytimes.com, espn.com etc.
+- Web browsers interact through Internet Protocol (IP) addresses.
+- DNS translates domain names to IP addresses so browsers can load Internet resources.
