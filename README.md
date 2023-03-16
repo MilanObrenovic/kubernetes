@@ -2396,3 +2396,16 @@ sudo !!
 readOnly: true
 ```
 - It should be read-only, this means if the application wants to write to this specific path (`/var/log`), it's impossible to do it – it can only read contents from it.
+
+## 10.5. Other Volume Types
+
+- Full documentation:
+  - https://kubernetes.io/docs/concepts/storage/volumes/
+
+### 10.5.1. `awsElasticBlockStore` Volume
+
+- Mounts an Amazon Web Services (AWS) EBS volume into your pod.
+- Unlike `emptyDir`, which is erased when a pod is removed, the contents of an EBS volume are persisted and the volume is unmounted.
+- This means that an EBS volume can be pre-populated with data, and that data can be shared between pods.
+- EBS is just a block storage where you store data.
+  - You can have for example, 10GB, 80GB, whatever you request.
