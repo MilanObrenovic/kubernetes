@@ -2534,3 +2534,70 @@ cat /mnt/data/index.html
 ```
 - Now both nodes should have this data created.
 9. In [pv-pvc.yml](yamls/pv-pvc.yml), add `PersistentVolume`, `PersistentVolumeClaim` and a `Deployment` which binds them together.
+
+## 10.9. PersistentVolume And PersistentVolumeClaim In Action
+
+1. Apply `pv-pvc.yml` changes:
+```bash
+kubectl apply -f yamls/pv-pvc.yml
+```
+2. View all resources:
+```bash
+kubectl api-resources
+```
+- Here we can see `persistentvolumeclaims` and `persistentvolumes`.
+- Notice how `persistentvolumes` is **NOT** namespaced, this is because the volume (which is the storage), for the pod to use it, you have to have a claim. That's also why the claim **IS** namespaced.
+- There should also be a `storageclasses` endpoint.
+3. View persistent volumes:
+```bash
+kubectl get pv
+```
+4. View details and information about the created persistent volume:
+```bash
+kubectl describe pv mypv
+```
+5. View persistent volume claims:
+```bash
+kubectl get pvc
+```
+6. View details and information about the created persistent volume claim:
+```bash
+kubectl describe pvc mypvc
+```
+7. View all pods and make sure the `pv-pvc` pod is running:
+```bash
+kubectl get pods
+```
+8. Execute into that pod via interactive mode:
+```bash
+kubectl exec -it pv-pvc-9784d565d-k9vrv -- sh
+```
+9. Navigate to the path we mounted:
+```bash
+cd /usr/share/nginx/html
+```
+10. Read contents of the `index.html` file, should be the same content we defined earlier:
+```bash
+cat index.html
+```
+11. Add a `pv-pvc` service in [pv-pvc.yml](yamls/pv-pvc.yml).
+12. Apply those changes:
+```bash
+kubectl apply -f yamls/pv-pvc.yml
+```
+13. View all services and confirm that it was created:
+```bash
+kubectl get svc
+```
+- Notice how the ExternalIP is pending.
+14. In a new terminal, run minikube tunnel:
+```bash
+minikube tunnel
+```
+- Now you should see the `pv-pvc` service have an ExternalIP assigned.
+15. Open the browser and try to test that ExternalIP as url:
+```bash
+http://127.0.0.1
+```
+- The text we saved in the persistent volume file system should be displayed.
+- **Note:** if it shows the `frontend`, that's because both are listening on the same external IP address, so just delete the whole `frontend.yml` file.

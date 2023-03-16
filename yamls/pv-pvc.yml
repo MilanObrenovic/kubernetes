@@ -63,3 +63,15 @@ spec:
   selector:
     matchLabels:
       app: pv-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pv-pvc
+spec:
+  selector:
+    app: pv-pvc
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
