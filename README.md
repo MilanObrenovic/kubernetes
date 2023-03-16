@@ -2472,3 +2472,28 @@ readOnly: true
   - Basically, the provider implements the interface and that in itself gives us something called a **Persistent Volume (PV)**.
 - Persistent volume in Kubernetes is a mapping between the Storage Provider (the actual data block) to the Kubernetes land.
 - The way it works is, we have a pod, and if the pod wants to consume the volume we have to use something called **Persistent Volume Claim (PVC)**.
+
+## 10.7. Persistent Volume SubSystem
+
+### 10.7.1. Persistent Volume Sub System
+
+- PersistentVolume subsystem provides an API for users and administrators that abstracts details of how storage is provided from how it is consumed.
+- All of this is done through **PersistentVolume** and **PersistentVolumeClaim**.
+
+### 10.7.2. How It Works
+
+![img.png](misc/persistent-volume-sub-system.png)
+
+- First we have a **Storage Provider (SP)** (e.g. Amazon Elastic Block Storage – EBS).
+- This gets translated to Kubernetes as a **Persistent Volume (PV)**.
+- From **Persistent Volume** we can actually configure the **Storage Class (SC)**, such as:
+  - Fast storage
+  - Slow storage
+  - Both
+- This way we can configure the parameters for how we provide storage within our cluster.
+- Then we have **Persistent Volume Claim (PVC)**, which allows the end user to get access to a **Persistent Volume**.
+- If **Persistent Volume** has for example 20GB of storage, the **Persistent Volume Claim** can ask for 20GB or less.
+- This is how pods (the actual user) request for some storage.
+- **PersistentVolume:** is a storage resource provisioned (provided) by an administrator.
+- **PersistentVolumeClaim:** is a user's request for and claim to a persistent volume.
+- **StorageClass:** describes the parameters for a class of storage for which PersistentVolumes can be dynamically provisioned.
