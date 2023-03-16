@@ -2654,3 +2654,22 @@ kubectl describe cm nginx-conf
 ```bash
 kubectl describe cm app-properties
 ```
+
+## 11.3. ConfigMaps Using Imperative Command
+
+1. View help commands with examples on how to create a ConfigMap using imperative command:
+```bash
+kubectl create configmap -h
+```
+2. Create a new config map:
+```bash
+kubectl create cm config1 --from-literal=key1=value1 --from-literal=key2=value2
+```
+3. View all created config maps:
+```bash
+kubectl get cm
+```
+4. View information and details regarding a specific config map:
+```bash
+kubectl describe cm config1
+```
