@@ -2284,3 +2284,61 @@ command:
   - "sleep"
   - "3600"
 ```
+
+## 10.3. EmptyDir Volume Part 2
+
+1. Delete the already defined `empty-dir-volume` deployment:
+```bash
+kubectl delete -f yamls/empty-dir-volume.yml
+```
+2. List all pods, verify that it was deleted:
+```bash
+kubectl get pods
+```
+3. Save changes:
+```bash
+kubectl apply -f yamls/empty-dir-volume.yml
+```
+4. List all pods again and verify this time that the process is running:
+```bash
+kubectl get pods
+```
+5. Execute into the first container via interactive mode:
+```bash
+kubectl exec -it emptydir-volume-7f468bf5c8-rhxqq -c one -- sh
+```
+6. List all folders and files within this container:
+```bash
+ls
+```
+- There should be a directory `foo` which is the one we defined in the deployment yaml file.
+7. The file should be created as well:
+```bash
+ls foo/
+```
+8. The second container should also have the exact same folder and file, because both share it on the same volume:
+```bash
+kubectl exec -it emptydir-volume-7f468bf5c8-rhxqq -c two -- sh
+```
+9. Inside the second container, add some random content in the `bar.txt`, for example just "`hello`".
+10. Now execute into the first container and try to read the contents of that exact same file. It should be the same content "`hello`".
+11. Create another file inside `foo` directory called `bom.txt` and add text `bom bom`.
+12. List all pods to verify `emptydir-volume` exists:
+```bash
+kubectl get pods
+```
+13. Now delete the pod:
+```bash
+kubectl delete pod/emptydir-volume-7f468bf5c8-rhxqq
+```
+- All the data on volumes should now be permanently deleted.
+14. List all pods again:
+```bash
+kubectl get pods
+```
+- The old `emptydir-volume` should be permanently deleted while a new one should be running now.
+15. Execute into either container into the newly created pod:
+```bash
+kubectl exec -it emptydir-volume-7f468bf5c8-7gmm9 -c one -- sh
+```
+- Now the `bom.txt` no longer exists.
