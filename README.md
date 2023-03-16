@@ -2629,3 +2629,28 @@ http://127.0.0.1
 
 - Allows us to store configuration.
 - ConfigMap is a map of **key-value** pair.
+
+## 11.2. Creating ConfigMap Declaratively
+
+1. List all API resources:
+```bash
+kubectl api-resources
+```
+- There should be an API resource `configmaps`.
+2. Create a [config-maps.yml](yamls/config-maps.yml) map configuration.
+3. Apply changes of this config map:
+```bash
+kubectl apply -f yamls/config-maps.yml
+```
+4. List all config maps:
+```bash
+kubectl get configmaps
+```
+5. View information regarding `nginx-conf` config map:
+```bash
+kubectl describe cm nginx-conf
+```
+6. Now view information regarding `app-properties` config map:
+```bash
+kubectl describe cm app-properties
+```
