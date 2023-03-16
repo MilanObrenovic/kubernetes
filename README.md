@@ -2409,3 +2409,66 @@ readOnly: true
 - This means that an EBS volume can be pre-populated with data, and that data can be shared between pods.
 - EBS is just a block storage where you store data.
   - You can have for example, 10GB, 80GB, whatever you request.
+
+## 10.6. PersistentVolumes
+
+### 10.6.1. Persistent Volumes
+
+- Allows us to store data beyond pod lifecycle.
+- If a pod fails, dies or moves to a different node – it does not matter, the data is still intact and can be shared between pods.
+
+### 10.6.2. Persistent Volumes Types
+
+![img.png](misc/persistent-volumes-types.png)
+
+- Kubernetes supports different persistent volumes such as:
+  - NFS
+  - Local
+  - Cloud Network storage
+    - **AWS**:
+      - Amazon Elastic Block Storage EBS
+    - **Azure**:
+      - Azure File Storage
+      - Azure Disk Storage
+    - **GCP:**
+      - Google Persistent Disk
+
+### 10.6.3. Persistent Volumes And Plugins
+
+- **PersistentVolumes** types are implemented as plugins.
+- Kubernetes currently supports the following plugins:
+  - `awsElasticBlockStore` – AWS Elastic Block Store (EBS)
+  - `azureDisk` – Azure Disk
+  - `azureFile` – Azure File
+  - `cephfs` – CephFS volume
+  - `cinder` – Cinder (OpenStack block storage) (**deprecated**)
+  - `csi` – Container Storage Interface (CSI)
+  - `fc` – Fibre Channel (FC) storage
+  - `flexVolume` – FlexVolume
+  - `flocker` – Flocker storage
+  - `gcePersistentDisk` – GCE Persistent Disk
+  - `glusterfs` – Glusterfs volume
+  - `hostPath` – HostPath volume (for single node testing only; WILL NOT WORK in a multi-node cluster; consider using **local** volume instead)
+  - `iscsi` – iSCSI (SCSI over IP) storage
+  - `local` – local storage devices mounted on nodes
+  - `nfs` – Network File System (NFS) storage
+  - `photonPersistentDisk` – Photon controller persistent disk (this volume type no longer works since the removal of the corresponding cloud provider)
+  - `portworxVolume` – Portworx volume
+  - `quobyte` – Quobyte volume
+  - `rbd` – Rados Block Device (RBD) volume
+  - `scaleIO` – ScaleIO volume (**deprecated**)
+  - `storageos` – StorageOS volume
+  - `vsphereVolume` – vSphere VMDK volume
+
+### 10.6.4. How It Works
+
+![img.png](misc/persistentvolumes-how-it-works.png)
+
+- Let's say the application is running Kubernetes on EKS (Amazon).
+- Here we have Elastic Block Storage (EBS) and this is the place for data storage.
+- Then with Kubernetes there is something called a **Container Storage Interface (CSI)**.
+  - This interface is what providers have to implement.
+  - In this case we have `aws-ebs-plugin`.
+  - Basically, the provider implements the interface and that in itself gives us something called a **Persistent Volume (PV)**.
+- Persistent volume in Kubernetes is a mapping between the Storage Provider (the actual data block) to the Kubernetes land.
+- The way it works is, we have a pod, and if the pod wants to consume the volume we have to use something called **Persistent Volume Claim (PVC)**.
