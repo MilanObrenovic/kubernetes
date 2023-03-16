@@ -2494,6 +2494,43 @@ readOnly: true
 - Then we have **Persistent Volume Claim (PVC)**, which allows the end user to get access to a **Persistent Volume**.
 - If **Persistent Volume** has for example 20GB of storage, the **Persistent Volume Claim** can ask for 20GB or less.
 - This is how pods (the actual user) request for some storage.
-- **PersistentVolume:** is a storage resource provisioned (provided) by an administrator.
-- **PersistentVolumeClaim:** is a user's request for and claim to a persistent volume.
-- **StorageClass:** describes the parameters for a class of storage for which PersistentVolumes can be dynamically provisioned.
+- **PersistentVolume (PV):** is a storage resource provisioned (provided) by an administrator.
+- **PersistentVolumeClaim (PVC):** is a user's request for and claim to a persistent volume.
+- **StorageClass (SC):** describes the parameters for a class of storage for which PersistentVolumes can be dynamically provisioned.
+
+## 10.8. Create PersistentVolume And PersistentVolumeClaim
+
+1. Ssh into minikube:
+```bash
+minikube ssh
+```
+2. Create a new directory `data` inside of `/mnt` directory:
+```bash
+sudo mkdir /mnt/data
+```
+3. Echo a text and save it inside `index.html` file:
+```bash
+sudo sh -c "echo 'Hello PV & PVC – Kubernetes is awesome' > /mnt/data/index.html"
+```
+4. Read contents of this file to confirm it has been added correctly:
+```bash
+cat /mnt/data/index.html
+```
+5. Exit the minikube terminal and ssh into the second minikube node:
+```bash
+minikube ssh -n minikube-m02
+```
+6. Create a new directory `data` inside of `/mnt` directory:
+```bash
+sudo mkdir /mnt/data
+```
+7. Echo a text and save it inside `index.html` file:
+```bash
+sudo sh -c "echo 'Hello PV & PVC – Kubernetes is awesome' > /mnt/data/index.html"
+```
+8. Read contents of this file to confirm it has been added correctly:
+```bash
+cat /mnt/data/index.html
+```
+- Now both nodes should have this data created.
+9. In [pv-pvc.yml](yamls/pv-pvc.yml), add `PersistentVolume`, `PersistentVolumeClaim` and a `Deployment` which binds them together.

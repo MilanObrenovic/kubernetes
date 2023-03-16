@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+spec:
+  capacity:
+    storage: "100Mi"
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "manual"
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  resources:
+    requests:
+      storage: "100Mi"
+  volumeMode: Filesystem
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pv-pvc
+  labels:
+    app: pv-pvc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: pv-pvc
+      labels:
+        app: pv-pvc
+    spec:
+      volumes:
+          # create folder `data`
+        - name: data
+          persistentVolumeClaim:
+            claimName: "mypvc"
+      containers:
+        - name: pv-pvc
+          image: nginx
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html"
+              # mount the folder that we just created from the above `volumes` property
+              name: data
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: pv-pvc
