@@ -12,7 +12,7 @@ kind: ConfigMap
 metadata:
   name: nginx-conf
 data:
-  default.conf: |
+  nginx.conf: |
     server {
         listen          80;
         server_name     localhost;
@@ -34,3 +34,56 @@ data:
             return 200 "healthy\n";
         }
     }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-map
+  labels:
+    app: config-map
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: config-map
+      labels:
+        app: config-map
+    spec:
+      containers:
+        - name: config-map-env
+          image: busybox
+          command:
+            - "/bin/sh"
+            - "-c"
+          args:
+            - "env && sleep 3600"
+          env:
+            - name: APP_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: app-properties
+                  key: app-version
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-properties
+                  key: app-name
+            - name: TEAM
+              valueFrom:
+                configMapKeyRef:
+                  name: app-properties
+                  key: team
+            - name: NGINX_CONF
+              valueFrom:
+                configMapKeyRef:
+                  name: nginx-conf
+                  key: nginx.conf
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          imagePullPolicy: Always
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: config-map

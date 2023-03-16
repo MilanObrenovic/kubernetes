@@ -2673,3 +2673,33 @@ kubectl get cm
 ```bash
 kubectl describe cm config1
 ```
+
+## 11.4. ConfigMaps And Environment Variables
+
+### 11.4.1. ConfigMaps And Pods
+
+- Now let's see how to inject the configuration that we have inside our ConfigMaps into our pods.
+- The most common ways that we're gonna be doing this is by using:
+  - Environment variables
+  - Volumes
+
+### 11.4.2. ConfigMaps And ENV
+
+![img.png](misc/configmaps-and-env.png)
+
+- Once we have a ConfigMap, inside our `env` key we can pass the environment `name` along with the name of the config map, and then the key from that config map.
+- **Drawback:** changes made to ConfigMap will not be reflected on the container.
+
+1. Inside [config-maps.yml](yamls/config-maps.yml), add a deployment `config-map`.
+2. Apply those changes:
+```bash
+kubectl apply -f yamls/config-maps.yml
+```
+3. View all pods:
+```bash
+kubectl get pods
+```
+4. View logs of the created config map:
+```bash
+kubectl logs config-map-659668556f-8bgq7 -c config-map-env
+```
