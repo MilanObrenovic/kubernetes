@@ -2342,3 +2342,57 @@ kubectl get pods
 kubectl exec -it emptydir-volume-7f468bf5c8-7gmm9 -c one -- sh
 ```
 - Now the `bom.txt` no longer exists.
+
+## 10.4. HostPath Volume
+
+- Used when applications need to access to the underlying host (node) file system.
+- This is dangerous – because for example if we give access then the application can mess up with the host.
+- The recommended approach is to create a volume which is read-only.
+
+1. Ssh into minikube:
+```bash
+minikube ssh
+```
+2. Navigate to log folder:
+```bash
+cd /var/log
+```
+3. Create a [host-path-volume.yml](yamls/host-path-volume.yml) and apply those changes:
+```bash
+kubectl apply -f yamls/host-path-volume.yml
+```
+4. View all pods and verify that this pod has been created:
+```bash
+kubectl get pods
+```
+5. Execute into this container:
+```bash
+kubectl exec -it hostpath-885cd755-jh7q4 -- sh
+```
+6. Within the container, navigate to:
+```bash
+cd /var/log
+```
+- If you `ls`, all the files and folders are coming from the host.
+7. In a new terminal, ssh into minikube:
+```bash
+minikube ssh -n minikube-m02
+```
+8. Navigate to the same directory path:
+```bash
+cd /var/log
+```
+9. Create a `foo.bar` file inside `logs` folder:
+```bash
+touch foo.bar
+```
+- In case the permission is denied, use command:
+```bash
+sudo !!
+```
+10. Now you should be able to see this file within the `hostpath` container.
+11. Inside [host-path-volume.yml](yamls/host-path-volume.yml), under `volumeMounts` add:
+```yml
+readOnly: true
+```
+- It should be read-only, this means if the application wants to write to this specific path (`/var/log`), it's impossible to do it – it can only read contents from it.
