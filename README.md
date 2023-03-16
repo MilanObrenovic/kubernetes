@@ -2601,3 +2601,31 @@ http://127.0.0.1
 ```
 - The text we saved in the persistent volume file system should be displayed.
 - **Note:** if it shows the `frontend`, that's because both are listening on the same external IP address, so just delete the whole `frontend.yml` file.
+
+# 11. ConfigMaps
+
+## 11.1. What Are ConfigMaps
+
+### 11.1.1. ConfigMaps
+
+![img.png](misc/configmaps.png)
+
+- Container images should be reusable.
+- When you build software, the same image should be used for **dev**, **test**, **staging** and **production**, or any other environment.
+- So basically you have one application and the only thing that changes is the configuration.
+- Let's say we have a Docker image, and the configuration would be one for dev, test and prod.
+- Docker image (the binary itself) is the same, but what changes is the configuration.
+
+### 11.1.2. Benefits Of Configuration Files
+
+- Reusable application images.
+- Simpler testing.
+  - Because you only have 1 (binary) image that you can test in different scenarios.
+- Configuration changes are disruptive.
+  - Let's say you want to perform a software release, and you just want to change a configuration value.
+  - You can do that and the application can still run while the configuration changes without affecting the rolling of the application.
+
+### 11.1.3. What Are ConfigMaps?
+
+- Allows us to store configuration.
+- ConfigMap is a map of **key-value** pair.
