@@ -2748,3 +2748,39 @@ cat team
 cd ../nginx
 cat nginx.conf
 ```
+
+## 11.6. Mount Multiple ConfigMaps In The Same Folder
+
+1. Add a new volume under `volumes` key in [config-maps.yml](yamls/config-maps.yml):
+```yml
+- name: config
+  projected:
+    sources:
+      - configMap:
+          name: nginx-conf
+      - configMap:
+          name: app-properties
+```
+2. Now mount this volume under `volumeMounts` key:
+```yml
+- mountPath: /etc/order/config
+  name: config
+```
+3. Apply these changes:
+```bash
+kubectl apply -f yamls/config-maps.yml
+```
+4. List all pods:
+```bash
+kubectl get pods
+```
+5. Execute into the newly formed `config-map` pod but within the `config-map-volume` container:
+```bash
+kubectl exec -it config-map-dcd995f68-mtq6f -c config-map-volume -- sh
+```
+6. Navigate into the newly created `config` directory and list everything:
+```bash
+cd /etc/order/config
+ls
+```
+- Here we can see that we mounted all the config maps, and they're all in the same directory.

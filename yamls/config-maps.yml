@@ -56,6 +56,13 @@ spec:
         - name: app-properties
           configMap:
             name: app-properties
+        - name: config
+          projected:
+            sources:
+              - configMap:
+                  name: nginx-conf
+              - configMap:
+                  name: app-properties
       containers:
         - name: config-map-volume
           volumeMounts:
@@ -63,6 +70,8 @@ spec:
               name: nginx-conf
             - mountPath: /etc/order/properties
               name: app-properties
+            - mountPath: /etc/order/config
+              name: config
           image: busybox
           resources:
             limits:
