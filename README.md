@@ -2968,3 +2968,28 @@ http://localhost:8080
 | `kubernetes.io/ssh-auth`              | credentials for SSH authentication      |
 | `kubernetes.io/tls`                   | data for a TLS client or server         |
 | `bootstrap.kubernetes.io/token`       | bootstrap token data                    |
+
+# 13. Namespaces
+
+## 13.1. Namespaces
+
+### 13.1.1. Namespaces
+
+![img.png](misc/namespaces.png)
+
+- Kubernetes uses **namespaces** to organize objects in a cluster.
+- We may want to organize objects by:
+  - Team
+  - Department
+  - Environment
+  - ...
+- By default, `kubectl` interacts with the `default` namespace.
+  - For example: `kubectl get pods` is the same as `kubectl get pods -n default`.
+
+1. To view all namespaces:
+```bash
+kubectl get ns
+```
+
+- You can organize your cluster the way you want using namespaces.
+- For example, you may want to have a namespace `logging` which is used for storing objects which are related for logging purposes.
