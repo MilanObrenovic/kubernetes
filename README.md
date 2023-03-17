@@ -2951,3 +2951,20 @@ kubectl get pods
 ```bash
 kubectl port-forward pod/myapp-595d8bdb77-rb4hx 8080:80
 ```
+11. Visit the localhost to confirm that it's working:
+```bash
+http://localhost:8080
+```
+
+## 12.6. Secret Types
+
+| Builtin Type                          | Usage                                   |
+|---------------------------------------|-----------------------------------------|
+| `Opaque`                              | arbitrary user-defined data             |
+| `kubernetes.io/service-account-token` | service account token                   |
+| `kubernetes.io/dockercfg`             | serialized `~/.dockercfg` file          |
+| `kubernetes.io/dockerconfigjson`      | serialized `~/.docker/config.json` file |
+| `kubernetes.io/basic-auth`            | credentials for basic authentication    |
+| `kubernetes.io/ssh-auth`              | credentials for SSH authentication      |
+| `kubernetes.io/tls`                   | data for a TLS client or server         |
+| `bootstrap.kubernetes.io/token`       | bootstrap token data                    |
