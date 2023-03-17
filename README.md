@@ -3028,4 +3028,42 @@ kubectl apply -f yamls/namespaces.yml
 ```bash
 kubectl get ns
 ```
-8. 
+
+## 13.3. Using Namespaces
+
+1. Let's start off by deleting all the yamls:
+```bash
+kubectl delete -f yamls/.
+```
+2. Verify the created namespaces are gone:
+```bash
+kubectl get ns
+```
+3. Create the defined namespaces:
+```bash
+kubectl apply -f yamls/namespaces.yml
+```
+4. To view which types of Kubernetes components CAN be namespaced, use command:
+```bash
+kubectl api-resources
+```
+- For each API resource it says whether the resource can be namespaced or not.
+5. In [frontend.yml](yamls/frontend.yml) add a namespace `engineering` for both deployment and service.
+6. Verify there are no pods in `default` as well as `engineering` namespace.
+```bash
+kubectl get pods
+kubectl get pods -n engineering
+```
+7. Apply those changes:
+```bash
+kubectl apply -f yamls/frontend.yml
+```
+8. In [customer-deployment.yml](yamls/customer-deployment.yml) add a namespace `engineering` for everything.
+9. Apply those changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+10. List all pods in `engineering` namespace:
+```bash
+kubectl get pods -n engineering
+```
