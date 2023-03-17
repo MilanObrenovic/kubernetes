@@ -2784,3 +2784,14 @@ cd /etc/order/config
 ls
 ```
 - Here we can see that we mounted all the config maps, and they're all in the same directory.
+
+# 12. Secrets
+
+## 12.1. Secrets
+
+- Concept that allows us to store and manage sensitive information.
+- **ConfigMaps** should be used only to store configuration files.
+- **Sensitive data** should NOT be stored using ConfigMap – use Secrets!
+- So:
+  - **Configuration** = use ConfigMaps.
+  - **Sensitive data** = use Secrets.
