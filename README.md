@@ -2867,3 +2867,43 @@ cat api-token
 cat db-password
 ```
 - This is how to consume secrets using both volumes and environment variables.
+
+## 12.4. Secrets Are Not Secrets In Kubernetes
+
+1. First view all secrets:
+```bash
+kubectl get secrets
+```
+2. View information and details about `mysecret`:
+```bash
+kubectl describe secret mysecret
+```
+3. View information regarding a secret as a yaml format:
+```bash
+kubectl get secret mysecret -o yaml
+```
+- Here the `api-token` has a base64 encoded secret as a value.
+- This means we can use any base64 decoder to decode this "secret" and read the raw data.
+- Copy this `api-token`.
+4. List all pods:
+```bash
+kubectl get pods
+```
+5. Execute into the `secrets` pod:
+```bash
+kubectl exec -it secrets-57d484b877-m5xw8 -- sh
+```
+6. Verify that the `base64` binary exists in the container:
+```bash
+which base64
+```
+7. Use base64 decoder to read raw data of `api-token` secret:
+```bash
+echo dG9rZW4= | base64 -d
+```
+- Now it should print the raw data value – "`token`".
+Try the same thing but for `db-password` secret:
+```bash
+echo MTIz | base64 -d
+```
+8. This is why instead of using `secrets` for storing sensitive information, we should be using [Vault Project](https://developer.hashicorp.com/vault/docs/what-is-vault).
