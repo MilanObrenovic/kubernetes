@@ -2814,24 +2814,56 @@ kubectl get secrets mysecret -o yaml
 ```bash
 kubectl describe secret mysecret
 ```
-5. Let's say you have a file, and you want to create a secret of that file:
+5. Create a secret file with some random content inside:
+```bash
+touch yamls/secret
+echo "generic-secret" > yamls/secret
+```
+6. Let's say you have a file, and you want to create a secret of that file:
 ```bash
 kubectl create secret generic mysecret-from-file --from-file=yamls/secret
 ```
-6. List all secrets again to view it:
+7. List all secrets again to view it:
 ```bash
 kubectl get secrets
 ```
-7. View details and information of that secret:
+8. View details and information of that secret:
 ```bash
 kubectl get secrets mysecret-from-file -o yaml
 ```
 - There should be a `data` with key `secret` and a base64 encoded secret.
-8. To delete a secret:
+9. To delete a secret:
 ```bash
 kubectl delete secret mysecret-from-file
 ```
-9. Delete the secret file because we don't need it anymore:
+
+## 12.3. Consuming Secrets With Volumes And Environment Variables
+
+1. Create a [secrets.yml](yamls/secrets.yml) file with its own deployment, so that secrets are used in volume and then mount that volume.
+2. Apply these changes:
 ```bash
-rm yamls/secret
+kubectl apply -f yamls/secrets.yml
 ```
+3. List all pods and make sure `secrets` pod is running:
+```bash
+kubectl get pods
+```
+4. Execute into the newly formed `secrets` pod:
+```bash
+kubectl exec -it secrets-57d484b877-m5xw8 -- sh
+```
+5. To view the secrets inside the container, use command:
+```bash
+env
+```
+- There should be `PEOPLEOID_SECRET=generic-secret` – it's no longer the base64 encoded string.
+6. Navigate into directory `/etc/secrets`.
+```bash
+cd /etc/secrets
+```
+7. Now you can read contents of created files:
+```bash
+cat api-token
+cat db-password
+```
+- This is how to consume secrets using both volumes and environment variables.
