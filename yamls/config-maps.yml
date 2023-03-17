@@ -49,9 +49,36 @@ spec:
       labels:
         app: config-map
     spec:
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+        - name: app-properties
+          configMap:
+            name: app-properties
       containers:
+        - name: config-map-volume
+          volumeMounts:
+            - mountPath: /etc/order/nginx
+              name: nginx-conf
+            - mountPath: /etc/order/properties
+              name: app-properties
+          image: busybox
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          command:
+            - "/bin/sh"
+            - "-c"
+          args:
+            - "sleep 3600"
         - name: config-map-env
           image: busybox
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           command:
             - "/bin/sh"
             - "-c"
@@ -78,10 +105,6 @@ spec:
                 configMapKeyRef:
                   name: nginx-conf
                   key: nginx.conf
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
           imagePullPolicy: Always
       restartPolicy: Always
   selector:

@@ -2703,3 +2703,48 @@ kubectl get pods
 ```bash
 kubectl logs config-map-659668556f-8bgq7 -c config-map-env
 ```
+
+## 11.5. ConfigMaps And Volumes
+
+### 11.5.1. ConfigMaps And Volumes
+
+![img.png](misc/configmaps-and-volumes.png)
+
+- Let's say we have a config map and a pod.
+- A pod is a collection of 1 or more containers and volumes, and then we mount that volume inside of that container.
+- Whenever we mount a volume, we get a file structure that looks like this:
+```console
+/etc/name
+  /app.version
+  /server.name
+```
+
+1. Add `volumes` and `volumeMounts` in [config-maps.yml](yamls/config-maps.yml) file.
+2. Apply those changes:
+```bash
+kubectl apply -f yamls/config-maps.yml
+```
+3. List all pods and confirm if the pods are created:
+```bash
+kubectl get pods
+```
+4. Execute into the `config-map` pod but within the `config-map-volume` container:
+```bash
+kubectl exec -it config-map-6876c8db8d-m9wjk -c config-map-volume -- sh
+```
+5. Navigate into the `order` directory that was created from the config file:
+```bash
+cd /etc/order
+```
+6. Navigate into `properties` directory and read the contents of each data variable from the map config file:
+```bash
+cd properties
+cat app-name
+cat app-version
+cat team
+```
+7. Navigate into `nginx` directory and read the contents of `nginx.conf` map config file:
+```bash
+cd ../nginx
+cat nginx.conf
+```
