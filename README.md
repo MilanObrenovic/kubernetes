@@ -2795,3 +2795,43 @@ ls
 - So:
   - **Configuration** = use ConfigMaps.
   - **Sensitive data** = use Secrets.
+
+## 12.2. GenericSecret
+
+1. To create a generic secret using imperative command:
+```bash
+kubectl create secret generic mysecret --from-literal=db-password=123 --from-literal=api-token=token
+```
+2. List all secrets:
+```bash
+kubectl get secrets
+```
+3. View yaml data configuration of a specific secret:
+```bash
+kubectl get secrets mysecret -o yaml
+```
+4. View details and information of a specific secret:
+```bash
+kubectl describe secret mysecret
+```
+5. Let's say you have a file, and you want to create a secret of that file:
+```bash
+kubectl create secret generic mysecret-from-file --from-file=yamls/secret
+```
+6. List all secrets again to view it:
+```bash
+kubectl get secrets
+```
+7. View details and information of that secret:
+```bash
+kubectl get secrets mysecret-from-file -o yaml
+```
+- There should be a `data` with key `secret` and a base64 encoded secret.
+8. To delete a secret:
+```bash
+kubectl delete secret mysecret-from-file
+```
+9. Delete the secret file because we don't need it anymore:
+```bash
+rm yamls/secret
+```
