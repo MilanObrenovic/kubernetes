@@ -2993,3 +2993,39 @@ kubectl get ns
 
 - You can organize your cluster the way you want using namespaces.
 - For example, you may want to have a namespace `logging` which is used for storing objects which are related for logging purposes.
+
+## 13.2. Creating Namespaces
+
+1. List all resources:
+```bash
+kubectl api-resources
+```
+- A resources `namespaces` should be visible here.
+2. Create a new namespace using imperative command:
+```bash
+kubectl create ns engineering
+kubectl create ns logging
+kubectl create ns tooling
+kubectl create ns ml
+```
+3. List all namespaces:
+```bash
+kubectl get ns
+```
+4. To delete a namespace, use command:
+```bash
+kubectl delete ns engineering
+kubectl delete ns logging
+kubectl delete ns tooling
+kubectl delete ns ml
+```
+5. Create namespaces using declarative approach in [namespaces.yml](yamls/namespaces.yml) file.
+6. Apply those changes:
+```bash
+kubectl apply -f yamls/namespaces.yml
+```
+7. List all namespaces:
+```bash
+kubectl get ns
+```
+8. 
