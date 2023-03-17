@@ -2907,3 +2907,47 @@ Try the same thing but for `db-password` secret:
 echo MTIz | base64 -d
 ```
 8. This is why instead of using `secrets` for storing sensitive information, we should be using [Vault Project](https://developer.hashicorp.com/vault/docs/what-is-vault).
+
+## 12.5. ImagePullSecrets
+
+1. Create a [pull-secret.yml](yamls/pull-secret.yml) file deployment.
+2. Apply those changes:
+```bash
+kubectl apply -f yamls/pull-secret.yml
+```
+- It should fail because we can't access a private Docker repository.
+3. Let's create a secret instead:
+```bash
+kubectl create secret docker-registry docker-hub-private --docker-username='<username>' --docker-password='<password>' --docker-email='<email>'
+```
+4. List all secrets:
+```bash
+kubectl get secrets
+```
+- Notice how this time the type should be `kubernetes.io/dockerconfigjson`.
+5. View details and information about the newly created secret:
+```bash
+kubectl describe secret docker-hub-private
+```
+6. View yaml config of that secret:
+```bash
+kubectl get secret docker-hub-private -o yaml
+```
+7. To apply this secret, add this yaml code below `spec` key:
+```yml
+imagePullSecrets:
+  - name: docker-hub-private
+```
+8. Apply these changes:
+```bash
+kubectl apply -f yamls/pull-secret.yml
+```
+9. View all pods again and make sure `myapp` is running:
+```bash
+kubectl get pods
+```
+- Now the `myapp` pod should be running.
+10. Connect to this pod:
+```bash
+kubectl port-forward pod/myapp-595d8bdb77-rb4hx 8080:80
+```
