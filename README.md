@@ -3067,3 +3067,28 @@ kubectl apply -f yamls/customer-deployment.yml
 ```bash
 kubectl get pods -n engineering
 ```
+
+## 13.4. Kubens
+
+1. Full documentation: https://github.com/ahmetb/kubectx
+2. Kubens is mainly used for switching between namespaces.
+3. To install it use command:
+```bash
+brew install kubectx
+```
+4. View all namespaces and check which namespace is active, use `kubens` command:
+```bash
+kubens
+```
+5. Switch to the active namespace:
+```bash
+kubens engineering
+```
+6. Now every command will search within the `engineering` namespace unless explicitly stated otherwise, for example:
+```bash
+kubectl get pods
+```
+7. Switch back to the previous namespace:
+```bash
+kubens -
+```
