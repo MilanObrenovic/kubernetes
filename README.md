@@ -3243,3 +3243,24 @@ kubectl get pods -w
   - We can also define the limit (maximum usage).
   - If we deploy an empty container, the container may use 20% of what it actually requested.
   - The container is capped at the max usage, because if there are other containers that need resources, they can always acquire it.
+
+## 15.2. Resource Requests And Limits
+
+1. To create a resource, inside a container block add:
+```yml
+resources:
+  limits:
+    # 128 megabytes (max capacity of memory usage)
+    memory: "128Mi"
+    # 500 millicores (half a core of CPU usage)
+    cpu: "500m"
+```
+2. To configure a request:
+```yml
+requests:
+  # 512 megabytes (half a gig)
+  memory: "512Mi"
+  # 1000 millicores (1 core of CPU usage)
+  cpu: "1000m"
+```
+- Keep in mind that `limits` (**MAXIMUM**) has to be more than the requests (**MINIMUM**).
