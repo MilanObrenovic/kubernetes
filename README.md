@@ -3264,3 +3264,26 @@ requests:
   cpu: "1000m"
 ```
 - Keep in mind that `limits` (**MAXIMUM**) has to be more than the requests (**MINIMUM**).
+
+## 15.3. Lets Max Out Our Cluster
+
+- Let's see what happens when we don't have enough resources for us to deploy the containers.
+
+1. In [customer-deployment.yml](yamls/customer-deployment.yml) change the number of replicas from 2 to 20 to see if our cluster can handle 20 replicas.
+2. Make sure you are inside the `engineering` namespace:
+```bash
+kubens engineering
+```
+3. Apply those changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+4. List all pods:
+```bash
+kubectl get pods
+```
+5. If some pods are pending, let's view the logs:
+```bash
+kubectl describe pod/customer-6987c9d78-dqmdg -n engineering
+```
+- It should say the pod failed to run due to not enough memory.

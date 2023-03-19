@@ -6,7 +6,7 @@ metadata:
   labels:
     app: customer
 spec:
-  replicas: 2
+  replicas: 20
   template:
     metadata:
       name: customer
