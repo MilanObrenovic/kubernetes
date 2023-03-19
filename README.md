@@ -3092,3 +3092,21 @@ kubectl get pods
 ```bash
 kubens -
 ```
+
+## 13.5. NS Cross Communication And Network Policies
+
+### 13.5.1. Cross NS Communication
+
+![img.png](misc/cross-ns-communication.png)
+
+- Let's say that we have a namespace `dev` and a service called `customer`.
+- On the same cluster, let's say there is another namespace `demo` and also a service called `customer`.
+- If from `demo` namespace we want to talk to the `dev` namespace, just say `customer.dev`.
+
+### 13.5.2. Network Policies
+
+![img.png](misc/network-policies.png)
+
+- Within namespaces, we also have something called **Network Policies**.
+- This is when for example there is a namespace `demo` and `prod`.
+- If we don't want these two namespaces to talk to each other – use **Network Policies**.
