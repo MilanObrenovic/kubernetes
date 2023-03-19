@@ -1,26 +1,17 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: job
-  labels:
-    app: job
+  name: db-backup-job
 spec:
-  replicas: 1
+  ttlSecondsAfterFinished: 10
   template:
-    metadata:
-      name: job
-      labels:
-        app: job
     spec:
       containers:
-        - name: job
+        - name: backup
           image: busybox
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-          imagePullPolicy: Always
-      restartPolicy: Always
-  selector:
-    matchLabels:
-      app: job
+          command:
+            - "/bin/sh"
+            - "-c"
+          args:
+            - "echo 'Performing db backup...' && sleep 20"
+      restartPolicy: Never

@@ -3311,6 +3311,31 @@ kubectl get pods -w
 - Examples of **jobs** usage:
   - Every single day there's a database backup.
   - Every single hour we want to automatically send an email.
+  - ...
 - We have **jobs** and **cron jobs**.
   - **Job** executes only once.
   - **Cron jobs** execute multiple times depending on your cron expression.
+
+## 16.2. Jobs
+
+- Let's create a job that will simulate a database backup.
+
+1. List all API resources:
+```bash
+kubectl api-resources
+```
+- There should be `jobs` and `cronjobs`.
+2. Create Kubernetes [job.yml](yamls/job.yml).
+3. Apply those changes:
+```bash
+kubectl apply -f yamls/job.yml
+```
+4. List all pods and watch for real-time changes:
+```bash
+kubectl get pods -w
+```
+5. Check logs to verify if it has performed a db backup:
+```bash
+kubectl logs db-backup-job-cj5mx
+```
+- This job will just run once and never again, it will kill the pod once the backup is complete.
