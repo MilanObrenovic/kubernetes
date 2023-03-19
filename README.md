@@ -3191,9 +3191,36 @@ and also a new environment:
 ```bash
 kubectl apply -f yamls/customer-deployment.yml
 ```
-9. List all pods:
+9. List all pods and immediately watch for real-time changes:
 ```bash
 kubectl get pods -w
 ```
 - The container will die every 30 seconds, and Kubernetes will now try running another instance of `customer` container.
 10. Delete the `KILL_IN_SECONDS` environment variable and apply the changes again.
+
+## 14.3. Readiness Probe
+
+### 14.3.1. Readiness Probe
+
+- The kubelet uses readiness probes to know when a container is ready to start accepting traffic.
+- For example, when the application starts maybe it first has to bootstrap the database, or a few things before the application is ready to start accepting traffic, so here we can set a delay to accommodate that.
+
+1. In [customer-deployment.yml](yamls/customer-deployment.yml), add readiness probe under `customer` container:
+```yml
+readinessProbe:
+  httpGet:
+    path: "/health"
+    port: 8080
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  periodSeconds: 5
+```
+2. Apply these changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+3. List all pods and immediately watch for real-time changes:
+```bash
+kubectl get pods -w
+```
