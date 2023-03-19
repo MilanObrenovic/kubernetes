@@ -3110,3 +3110,18 @@ kubens -
 - Within namespaces, we also have something called **Network Policies**.
 - This is when for example there is a namespace `demo` and `prod`.
 - If we don't want these two namespaces to talk to each other – use **Network Policies**.
+
+# 14. Health Checks
+
+## 14.1. Kubernetes Health Checks
+
+### 14.1.1. Health Checks
+
+- When you build an application, you need to make sure the application is healthy at all times and also ready to receive traffic.
+- Kubernetes uses a **process** health check to check if the application is alive, and if it's not then it restarts the process.
+- Since it uses a **process health check**, this on its own is not sufficient.
+  - ![img.png](misc/health-checks.png)
+  - For example, let's say we have the main app built in Golang and a database.
+  - Now let's say the app wants to connect to the database, but it can't.
+  - Although the application may seem healthy and able to handle traffic, it cannot.
+- To solve this issue, we have something called **Liveness Probe** and **Readiness Probe**.
