@@ -3125,3 +3125,75 @@ kubens -
   - Now let's say the app wants to connect to the database, but it can't.
   - Although the application may seem healthy and able to handle traffic, it cannot.
 - To solve this issue, we have something called **Liveness Probe** and **Readiness Probe**.
+
+## 14.2. Liveness Probe
+
+### 14.2.1. Liveness Probe
+
+- The kubelet uses liveness probes to know when to restart a container.
+- For example, liveness probes could catch a deadlock, database connection failure, etc.
+
+1. Set the `engineering` as default namespace:
+```bash
+kubens engineering
+```
+2. List all pods:
+```bash
+kubectl get pods
+```
+3. List all services:
+```bash
+kubectl get svc
+```
+4. Start the customer service:
+```bash
+minikube service customer -n engineering
+```
+5. Navigate to the generated url but target `customers` GET route:
+```bash
+http://127.0.0.1:49870/api/v1/customers
+```
+6. Under this url, we can also check the application health:
+```bash
+http://127.0.0.1:49870/health
+```
+- If it says `status: "UP"` then everything is fine and the application is alive.
+7. Now let's instruct Kubernetes to use `/health` endpoint for its liveness probe. To set up liveness probe, in [customer-deployment](yamls/customer-deployment.yml) under `customer` container add:
+```yml
+livenessProbe:
+  httpGet:
+    # Path to target for liveness checks
+    path: "/health"
+
+    # Port needs to be the same as container port
+    port: 8080
+
+  # Number of seconds after the container has started before liveness probes are initiated.
+  # So, here we say only kick off liveness probe checks after 5 seconds.
+  initialDelaySeconds: 5
+
+  # Number of seconds after which the probe times out. Defaults to 1 second
+  timeoutSeconds: 1
+
+  # Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  # Defaults to 3.
+  failureThreshold: 3
+
+  # How often (in seconds) to perform the probe
+  periodSeconds: 5
+```
+and also a new environment:
+```yml
+- name: KILL_IN_SECONDS
+  value: "30"
+```
+8. Apply these changes:
+```bash
+kubectl apply -f yamls/customer-deployment.yml
+```
+9. List all pods:
+```bash
+kubectl get pods -w
+```
+- The container will die every 30 seconds, and Kubernetes will now try running another instance of `customer` container.
+10. Delete the `KILL_IN_SECONDS` environment variable and apply the changes again.

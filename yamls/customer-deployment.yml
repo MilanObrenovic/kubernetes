@@ -24,9 +24,32 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          livenessProbe:
+            httpGet:
+              # Path to target for liveness checks
+              path: "/health"
+
+              # Port needs to be the same as container port
+              port: 8080
+
+            # Number of seconds after the container has started before liveness probes are initiated.
+            # So, here we say only kick off liveness probe checks after 5 seconds.
+            initialDelaySeconds: 5
+
+            # Number of seconds after which the probe times out. Defaults to 1 second
+            timeoutSeconds: 1
+
+            # Minimum consecutive failures for the probe to be considered failed after having succeeded.
+            # Defaults to 3.
+            failureThreshold: 3
+
+            # How often (in seconds) to perform the probe
+            periodSeconds: 5
           env:
             - name: ORDER_SERVICE
               value: "order"
+#            - name: KILL_IN_SECONDS
+#              value: "30"
           ports:
             - containerPort: 8080
       restartPolicy: Always
