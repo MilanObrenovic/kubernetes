@@ -3287,3 +3287,30 @@ kubectl get pods
 kubectl describe pod/customer-6987c9d78-dqmdg -n engineering
 ```
 - It should say the pod failed to run due to not enough memory.
+
+# 16. Jobs & Cron Jobs
+
+## 16.1. Running Tasks With Kubernetes
+
+1. Create a [job.yml](yamls/job.yml) deployment.
+2. Apply those changes:
+```bash
+kubectl apply -f yamls/job.yml
+```
+3. List all pods and watch for real-time changes:
+```bash
+kubectl get pods -w
+```
+- It should have a `CrashLoopBackOff` status.
+- This is because Kubernetes doesn't understand that this container (busybox) is not long-lived.
+- Our `job` container just came up and did nothing.
+- Kubernetes will now try to rerun this container but exponentially slower.
+- There are times when we need to execute tasks for example maybe once or twice, or every 5 minutes etc.
+  - This is what **jobs** allows us to do.
+  - The most common scenarios are database backups.
+- Examples of **jobs** usage:
+  - Every single day there's a database backup.
+  - Every single hour we want to automatically send an email.
+- We have **jobs** and **cron jobs**.
+  - **Job** executes only once.
+  - **Cron jobs** execute multiple times depending on your cron expression.
