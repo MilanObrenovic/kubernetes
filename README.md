@@ -3224,3 +3224,22 @@ kubectl apply -f yamls/customer-deployment.yml
 ```bash
 kubectl get pods -w
 ```
+
+# 15. Resource Management
+
+## 15.1. Resource Management
+
+### 15.1.1. Resource Management
+
+- Sometimes an app uses a lot of resources, such as **memory** and **CPU**.
+- This is dangerous, because our app can consume a lot of resources, leaving other applications starving for memory (or CPU).
+- Within Kubernetes, we can define:
+  - Minimum amount of resources that a container needs (**REQUEST**).
+  - Maximum amount of resources that a container can have (**LIMIT**).
+- Example:
+  - ![img.png](misc/resource-management.png)
+  - Let's say we have a resource which is a CPU or RAM.
+  - For any given container, we can specify the request (minimum of resources that the application needs).
+  - We can also define the limit (maximum usage).
+  - If we deploy an empty container, the container may use 20% of what it actually requested.
+  - The container is capped at the max usage, because if there are other containers that need resources, they can always acquire it.
