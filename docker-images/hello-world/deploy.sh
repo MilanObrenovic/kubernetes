@@ -2,9 +2,9 @@
 echo "============================="
 echo "=== BUILDING DOCKER IMAGE ==="
 echo "============================="
-docker build --no-cache -t peopleoid/kubernetes:hello-world docker-images/hello-world/
+docker build --no-cache -t milanobrenovic/kubernetes:hello-world docker-images/hello-world/
 
 echo "============================"
 echo "=== PUSHING DOCKER IMAGE ==="
 echo "============================"
-docker push peopleoid/kubernetes:hello-world
+docker push milanobrenovic/kubernetes:hello-world

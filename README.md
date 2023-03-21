@@ -378,7 +378,7 @@ kubectl version --output=yaml
 
 1. First make sure the Docker is up and running:
 ```bash
-docker run --rm -p 80:80 peopleoid/kubernetes:hello-world
+docker run --rm -p 80:80 milanobrenovic/kubernetes:hello-world
 ```
 2. This is currently running on Docker. To confirm this works navigate to:
 ```bash
@@ -386,7 +386,7 @@ http://localhost:8080/
 ```
 3. To run it via Kubernetes:
 ```bash
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run hello-world --image=milanobrenovic/kubernetes:hello-world --port=80
 ```
 4. A new Pod was just created. To verify this use command:
 ```bash
@@ -427,7 +427,7 @@ kubectl get pods -A
 ```
 4. Let's create a new Pod again:
 ```bash
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run hello-world --image=milanobrenovic/kubernetes:hello-world --port=80
 ```
 5. Verify the Pod was created:
 ```bash
@@ -581,7 +581,7 @@ minikube logs --node=minikube-m02
 
 - Pods can be created using an **imperative** command such as:
 ```bash
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run hello-world --image=milanobrenovic/kubernetes:hello-world --port=80
 ```
 - The other approach is to use a declarative configuration.
 - Declarative configuration defines the exact same command as imperative, but it's using a configuration (usually `.yml`) file such as:
@@ -595,7 +595,7 @@ metadata:
 spec:
   containers:
     - name: hello-world
-      image: peopleoid/kubernetes:hello-world
+      image: milanobrenovic/kubernetes:hello-world
       resources:
         limits:
           memory: "128Mi"
@@ -630,7 +630,7 @@ kubectl get pods
 ```
 2. Now use the **imperative** command to create the Pod:
 ```bash
-kubectl run hello-world --image=peopleoid/kubernetes:hello-world --port=80
+kubectl run hello-world --image=milanobrenovic/kubernetes:hello-world --port=80
 ```
 3. Check again and verify this newly created Pod is running:
 ```bash
@@ -692,7 +692,7 @@ spec:
       # This container is named 'hello-world'
     - name: hello-world
       # Image name
-      image: peopleoid/kubernetes:hello-world
+      image: milanobrenovic/kubernetes:hello-world
       resources:
         # This Pod can only access a certain amount of memory and cpu
         limits:
@@ -1053,12 +1053,12 @@ kubectl port-forward deployment/hello-world 8080:80
 The only thing we really have to change is the image name,
 because image name uniquely identifies every version of the application:
 ```yml
-image: peopleoid/kubernetes:hello-world-v2
+image: milanobrenovic/kubernetes:hello-world-v2
 ```
 Also add this under `labels: app: hello-world` key:
 ```yml
 annotations:
-  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v2"
+  kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v2"
 ```
 4. Now redeploy:
 ```bash
@@ -1114,9 +1114,9 @@ kubectl rollout history deployment hello-world --revision=4
 ```yml
 ...
 annotations:
-  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v3"
+  kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v3"
 ...
-image: peopleoid/kubernetes:hello-world-v3
+image: milanobrenovic/kubernetes:hello-world-v3
 ...
 ```
 2. Apply these changes:
@@ -1173,9 +1173,9 @@ replicas: 5
 ```yml
 ...
 annotations:
-  kubernetes.io/change-cause: "peopleoid/kubernetes:hello-world-v4"
+  kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v4"
 ...
-image: peopleoid/kubernetes:hello-world-v4
+image: milanobrenovic/kubernetes:hello-world-v4
 ...
 ```
 4. Apply these changes:
@@ -1761,10 +1761,10 @@ Goal:
 
 1. Have a client hit the load balancer that will run with `minikube tunnel`.
 2. Forward that to the LoadBalancer service type.
-3. The LoadBalancer service type forwards to pod `peopleoid/kubernetes:frontend-v1`, which listens on port `80`.
+3. The LoadBalancer service type forwards to pod `milanobrenovic/kubernetes:frontend-v1`, which listens on port `80`.
 4. The frontend gets some data from the customer microservice through a new ClusterIP service.
-5. Then that is forwarded to the pod `peopleoid/kubernetes:customer-v1` (port `8080`).
-6. Customer talks to order using ClusterIP service, which forwards it to pods `peopleoid/kubernetes:order-v1` (port `8081`).
+5. Then that is forwarded to the pod `milanobrenovic/kubernetes:customer-v1` (port `8080`).
+6. Customer talks to order using ClusterIP service, which forwards it to pods `milanobrenovic/kubernetes:order-v1` (port `8081`).
 
 ## 7.16. Full Stack App Exposed With LoadBalancer Service
 
@@ -1942,8 +1942,8 @@ kubectl get pods -l tier=backend,environment=test
 - Let's see how all of these fit together and how it's used in the Kubernetes world.
 
 1. First off in [pod.yml](yamls/pod.yml), add:
-   1. A pod with image `peopleoid/kubernetes:blue`, listening on port `80`.
-   2. A pod with image `peopleoid/kubernetes:green`, listening on port `80`.
+   1. A pod with image `milanobrenovic/kubernetes:blue`, listening on port `80`.
+   2. A pod with image `milanobrenovic/kubernetes:green`, listening on port `80`.
    3. A service with selector name `blue`, port `80` and target port `80`. This service should be of type ClusterIP.
 2. Apply these changes:
 ```bash
@@ -2856,7 +2856,7 @@ kubectl exec -it secrets-57d484b877-m5xw8 -- sh
 ```bash
 env
 ```
-- There should be `PEOPLEOID_SECRET=generic-secret` – it's no longer the base64 encoded string.
+- There should be `milanobrenovic_SECRET=generic-secret` – it's no longer the base64 encoded string.
 6. Navigate into directory `/etc/secrets`.
 ```bash
 cd /etc/secrets

@@ -2,9 +2,9 @@
 echo "===================================="
 echo "=== BUILDING DOCKER IMAGE – blue ==="
 echo "===================================="
-docker build --no-cache -t peopleoid/kubernetes:blue docker-images/blue/
+docker build --no-cache -t milanobrenovic/kubernetes:blue docker-images/blue/
 
 echo "==================================="
 echo "=== PUSHING DOCKER IMAGE – blue ==="
 echo "==================================="
-docker push peopleoid/kubernetes:blue
+docker push milanobrenovic/kubernetes:blue
