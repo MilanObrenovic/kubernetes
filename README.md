@@ -2856,7 +2856,7 @@ kubectl exec -it secrets-57d484b877-m5xw8 -- sh
 ```bash
 env
 ```
-- There should be `milanobrenovic_SECRET=generic-secret` – it's no longer the base64 encoded string.
+- There should be `MILANOBRENOVIC_SECRET=generic-secret` – it's no longer the base64 encoded string.
 6. Navigate into directory `/etc/secrets`.
 ```bash
 cd /etc/secrets
