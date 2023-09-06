@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
     - name: hello-world
-      image: peopleoid/kubernetes:hello-world
+      image: milanobrenovic/kubernetes:hello-world
       resources:
         limits:
           memory: "128Mi"
@@ -28,7 +28,7 @@ metadata:
 spec:
   containers:
     - name: blue
-      image: peopleoid/kubernetes:blue
+      image: milanobrenovic/kubernetes:blue
       resources:
         limits:
           memory: "128Mi"
@@ -48,7 +48,7 @@ metadata:
 spec:
   containers:
     - name: green
-      image: peopleoid/kubernetes:green
+      image: milanobrenovic/kubernetes:green
       resources:
         limits:
           memory: "128Mi"

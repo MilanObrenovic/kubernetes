@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: peopleoid/kubernetes:order-v1
+          image: milanobrenovic/kubernetes:order-v1
           imagePullPolicy: Always
           resources:
             limits:

@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: hello-world
-      image: peopleoid/kubernetes:hello-world
+      image: milanobrenovic/kubernetes:hello-world
       resources:
         limits:
           memory: "128Mi"

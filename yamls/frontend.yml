@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: peopleoid/kubernetes:frontend-v1
+          image: milanobrenovic/kubernetes:frontend-v1
           resources:
             limits:
               memory: "128Mi"

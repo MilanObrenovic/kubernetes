@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: customer
-          image: peopleoid/kubernetes:customer-v1
+          image: milanobrenovic/kubernetes:customer-v1
           imagePullPolicy: Always
           resources:
             limits:
