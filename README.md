@@ -394,7 +394,7 @@ kubectl get pods
 ```
 5. To access this pod:
 ```bash
-kubectl port-forward pod/hello-world pod/hello-world 8080:80
+kubectl port-forward pod/hello-world 8080:80
 ```
 6. Now the application is deployed using Kubernetes. To confirm this works navigate to:
 ```bash
@@ -516,7 +516,7 @@ minikube status
 ```
 3. Verify there are 2 nodes using the command:
 ```bash
-minikube get nodes
+kubectl get nodes
 ```
 4. Check the IP address of the Master Node. If we don't specify which node, it will default to the Master Node:
 ```bash
