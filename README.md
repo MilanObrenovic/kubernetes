@@ -1057,8 +1057,14 @@ image: milanobrenovic/kubernetes:hello-world-v2
 ```
 Also add this under `labels: app: hello-world` key:
 ```yml
-annotations:
-  kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v2"
+spec:
+  # ...
+  template:
+    metadata:
+      # ...
+      annotations:
+        kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v2"
+    # ...
 ```
 4. Now redeploy:
 ```bash
