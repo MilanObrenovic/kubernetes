@@ -1146,7 +1146,10 @@ kubectl rollout history deployment hello-world
 
 - To view more revisions, increase revision history limit in [deployment.yml](yamls/deployment.yml) file:
 ```yml
-revisionHistoryLimit: 20
+spec:
+  # ...
+  revisionHistoryLimit: 20
+  # ...
 ```
 - By default, it's set to 10.
 
@@ -1163,13 +1166,16 @@ revisionHistoryLimit: 20
     - Makes sure the application keeps on receiving traffic from previous version, while the new version is up and running.
     - Alternates the traffic to the new version when the new version is healthy.
 
-1. In [deployment.yml](yamls/deployment.yml) add this below `spec` key:
+1. In [deployment.yml](yamls/deployment.yml) add this within `spec` key:
 ```yml
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 1
-    maxSurge: 1
+spec:
+  # ...
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  # ...
 ```
 2. Increase the number of replicas to 5:
 ```yml
@@ -1177,12 +1183,12 @@ replicas: 5
 ```
 3. Update application version to v4:
 ```yml
-...
+# ...
 annotations:
   kubernetes.io/change-cause: "milanobrenovic/kubernetes:hello-world-v4"
-...
+# ...
 image: milanobrenovic/kubernetes:hello-world-v4
-...
+# ...
 ```
 4. Apply these changes:
 ```bash
@@ -1335,9 +1341,14 @@ kubectl describe pods order-778c484f7c-46h2w
 ```
 3. Grab its IP address and add it to [customer-deployment.yml](yamls/customer-deployment.yml) file for the container `customer`:
 ```yml
-env:
-  - name: ORDER_SERVICE
-    value: "10.244.0.39:8081"
+spec:
+  containers:
+    - name: customer
+      # ...
+      env:
+        - name: ORDER_SERVICE
+          value: "10.244.0.39:8081"
+      # ...
 ```
 4. Apply these changes:
 ```bash
@@ -1406,7 +1417,7 @@ kubectl apply -f yamls/order-deployment.yml
 ## 7.7. Inspecting ClusterIP Service And Endpoints With KUBECTL
 
 - The goal is to get customer microservice to talk to order microservice.
-- But first we have to set the customer microservice to point to the service we created, instead using individual pod IP addresses.
+- But first we have to set the customer microservice to point to the service we created instead, using individual pod IP addresses.
 
 1. View all available services (should be `kubernetes` and `order`):
 ```bash
@@ -1448,9 +1459,15 @@ kubectl describe service order
 ```
 2. Take the IP address and plug it in [customer-deployment.yml](yamls/customer-deployment.yml) file:
 ```yml
-env:
-  - name: ORDER_SERVICE
-    value: "10.109.216.231:8081"
+spec:
+  template:
+    spec:
+      containers:
+        - name: customer
+          env:
+            - name: ORDER_SERVICE
+              value: "10.109.216.231:8081"
+					# ...
 ```
 3. Apply these changes:
 ```bash
@@ -1480,9 +1497,15 @@ http://localhost:8080/api/v1/customers/3/orders
 - This should return an empty list because there are no orders with ID=3.
 8. In [customer-deployment.yml](yamls/customer-deployment.yml), replace the service IP address with just `order`. Kubernetes is smart enough to find the IP address for this service:
 ```yml
-env:
-  - name: ORDER_SERVICE
-    value: "order:8081"
+spec:
+  template:
+    spec:
+      containers:
+        - name: customer
+          env:
+            - name: ORDER_SERVICE
+              value: "order:8081"
+      		# ...
 ```
 9. Apply these changes:
 ```bash
@@ -1498,15 +1521,24 @@ http://localhost:8080/api/v1/customers/1/orders
 ```
 12. To eliminate the port as well, just set to `"order"` in [customer-deployment.yml](yamls/customer-deployment.yml) file:
 ```yml
-env:
-  - name: ORDER_SERVICE
-    value: "order"
+spec:
+  template:
+    spec:
+      containers:
+        - name: customer
+          env:
+            - name: ORDER_SERVICE
+              value: "order"
+					# ...
 ```
-13. Then in [order-deployment.yml](yamls/order-deployment.yml), set port to `80`:
+13. Then in [order-deployment.yml](yamls/order-deployment.yml), set port for the service to `80`:
 ```yml
-ports:
-  - port: 80
-    targetPort: 8081
+spec:
+	# ...
+  ports:
+    - port: 80
+      targetPort: 8081
+	# ...
 ```
 14. Apply these changes for customer:
 ```bash
@@ -1679,7 +1711,7 @@ minikube ssh
 ```bash
 curl localhost:31127/api/v1/customers
 ```
-10. Rename it from `customer-node` to `customer`:
+10. Rename it from `customer-node` to `customer` and apply the changes:
 ```yml
 metadata:
   name: customer
@@ -1855,19 +1887,19 @@ kubectl describe pods kube-apiserver-minikube -n kube-system
 1. Let's analyze the [customer-deployment.yml](yamls/customer-deployment.yml) file as an example. 
 2. Here we have this part:
 ```yml
-...
+# ...
 template:
   metadata:
     name: customer
     labels:
       app: customer
-...
+# ...
 ```
 3. Labels are a key-value pair that we can attach to object, such:
-  - Pods
-  - Services
-  - Replica Sets
-  - Other Kubernetes objects
+   - Pods
+   - Services
+   - Replica Sets
+   - Other Kubernetes objects
 - They're used to organize and select objects by labels.
 - The above code is naming the pod as `customer`.
 4. Let's look at this example:
@@ -1982,7 +2014,7 @@ kubectl describe svc labels-and-selector
 9. Add `environment: test` to both `blue` and `green` pods, and then describe the service again – this time it should have 2 endpoints again because the selector matches with BOTH labels.
 10. Start the service:
 ```bash
-kubectl service labels-and-selector
+minikube service labels-and-selector
 ```
 11. Open the generated localhost url and test if it works:
 ```bash
@@ -2131,7 +2163,15 @@ kubectl get pods
 ```bash
 kubectl get pods -n kube-system
 ```
-4. In [pod.yml](yamls/pod.yml), we have duplicated the `green` pod as an example, and added namespace to `kube-system`. Now if we list all pods within `kube-system`:
+4. In [pod.yml](yamls/pod.yml), duplicate the `green` pod as an example, and add namespace `kube-system` and apply changes:
+```yml
+# ...
+metadata:
+  name: green
+  namespace: kube-system
+# ...
+```
+5. Now if we list all pods within `kube-system`:
 ```bash
 kubectl get pods -n kube-system
 ```
@@ -2326,7 +2366,10 @@ ls foo/
 ```bash
 kubectl exec -it emptydir-volume-7f468bf5c8-rhxqq -c two -- sh
 ```
-9. Inside the second container, add some random content in the `bar.txt`, for example just "`hello`".
+9. Inside the second container, add some random content in the `bar.txt`, for example just "`hello`":
+```bash
+echo "hello" > foo/bar.txt
+```
 10. Now execute into the first container and try to read the contents of that exact same file. It should be the same content "`hello`".
 11. Create another file inside `foo` directory called `bom.txt` and add text `bom bom`.
 12. List all pods to verify `emptydir-volume` exists:
@@ -3178,7 +3221,8 @@ livenessProbe:
   # So, here we say only kick off liveness probe checks after 5 seconds.
   initialDelaySeconds: 5
 
-  # Number of seconds after which the probe times out. Defaults to 1 second
+  # Number of seconds after which the probe times out.
+  # Defaults to 1 second.
   timeoutSeconds: 1
 
   # Minimum consecutive failures for the probe to be considered failed after having succeeded.
@@ -3256,18 +3300,20 @@ kubectl get pods -w
 ```yml
 resources:
   limits:
+    # 512 megabytes (half a gig)
+    memory: "512Mi"
+    # 1000 millicores (1 core of CPU usage)
+    cpu: "1000m"
+```
+2. To configure a request:
+```yml
+resources:
+  # ...
+  requests:
     # 128 megabytes (max capacity of memory usage)
     memory: "128Mi"
     # 500 millicores (half a core of CPU usage)
     cpu: "500m"
-```
-2. To configure a request:
-```yml
-requests:
-  # 512 megabytes (half a gig)
-  memory: "512Mi"
-  # 1000 millicores (1 core of CPU usage)
-  cpu: "1000m"
 ```
 - Keep in mind that `limits` (**MAXIMUM**) has to be more than the requests (**MINIMUM**).
 
@@ -3344,4 +3390,4 @@ kubectl get pods -w
 ```bash
 kubectl logs db-backup-job-cj5mx
 ```
-- This job will just run once and never again, it will kill the pod once the backup is complete.
+- This job will run just once and never again, it will kill the pod once the backup is complete.
