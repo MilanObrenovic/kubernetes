@@ -1467,7 +1467,7 @@ spec:
           env:
             - name: ORDER_SERVICE
               value: "10.109.216.231:8081"
-					# ...
+# ...
 ```
 3. Apply these changes:
 ```bash
